@@ -1,0 +1,19 @@
+###
+1.0
+###
+
+Prototype Initial Release
+Only drawingRoutine 5 and 20 were available
+
+###
+1.1
+###
+
+Added all relevant drawingRoutines to be compatible with the hwpbuilder
+(https://falkooxc2.pythonanywhere.com/hwpbuild)
+
+###
+1.2
+###
+
+Added drawingRoutine 22

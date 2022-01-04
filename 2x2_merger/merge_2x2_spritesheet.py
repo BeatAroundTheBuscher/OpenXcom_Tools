@@ -15,6 +15,28 @@ mergedWidth = 65
 mergedHeight = 57
 
 
+# [Top, Right, Left, Bottom]
+
+# copied from 3
+# Tested with COPTER3 (Xpiratez?)
+mergedList_DR22 = [\
+        [0, 8, 16, 24],\
+        [1, 9, 17, 25],\
+        [2, 10, 18, 26],\
+        [3, 11, 19, 27],\
+        [4, 12, 20, 28],\
+        [5, 13, 21, 29],\
+        [6, 14, 22, 30],\
+        [7, 15, 23, 31],\
+        [32, 40, 48, 56],\
+        [33, 41, 49, 57],\
+        [34, 42, 50, 58],\
+        [35, 43, 51, 59],\
+        [36, 44, 52, 60],\
+        [37, 45, 53, 61],\
+        [38, 46, 54, 62],\
+        [39, 47, 55, 63]]
+
 
 # Tested with Xarquid
 mergedList_DR21 = [\
@@ -341,7 +363,7 @@ def drawPart(img, selectedTile, offsetX, offsetY):
 
 if len(sys.argv) < 3:
         print("Usage: python merge_png.py file_to_be_merged.png drawingRoutineNumber")
-        print("Currently works for drawingRoutine 2, 3, 5, 11, 12, 20 and 21")
+        print("Currently works for drawingRoutine 2, 3, 5, 11, 12, 20 and 21, 22")
         sys.exit(0)
 
 chosenMergedList = []
@@ -374,6 +396,10 @@ elif int(sys.argv[2]) == 21:
     chosenMergedList = mergedList_DR21 # looks good
     piecesPerRow = 4
     x, y = 260, 456
+elif int(sys.argv[2]) == 22:
+    chosenMergedList = mergedList_DR22 # seems to create artefacts on propulsion
+    piecesPerRow = 8
+    x, y = 520, 114
 
 if len(chosenMergedList) == 0:
     print("Unsupported drawingRoutine")
