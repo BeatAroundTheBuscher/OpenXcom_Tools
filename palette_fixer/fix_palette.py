@@ -17,16 +17,35 @@ import logging, datetime
 import oxcePalettes
 
 def guessPalette(palette):
-    return oxcePalettes.battlePalette
+    # confidence is determined by checking 16 of 256 colors and correctNumber/16
+    # the picked colors are the diagonal from NE to SW - should be good enough for approximation
+
+    if len(palette) != 256:
+        logging.error("Image does not have a palette with 256 colors")
+        raise ValueError("Image does not have a palette with 256 colors")
+        return None
+
+    confidence = 0 
+    if True:
+        logging.info("Guessed battlePaletteUFO")
+        return oxcePalettes.battlePaletteUFO
+    else:
+        logging.info("Failed to guess palette")
+        raise ValueError("No known palette")
+        return None
 
 def fixPalette(filePath):
-    logging.debug("Running filePath: " + filePath)
+    logging.info("Running filePath: " + filePath)
 
     filePath = re.sub("\\n", "", filePath)
     try:
         pngReader = png.Reader(filename=filePath)
         w, h, pixels, metadata = pngReader.read_flat()
     
+        # some kind of checker to determine which palette the rest uses
+        logging.debug("TODO: Determine palette by parsing the read palette")
+        guessedPalette = guessPalette(metadata["palette"])
+
         found = 0 # needs a cleaner way
 
         for x in pngReader.trns:
@@ -47,17 +66,19 @@ def fixPalette(filePath):
         if "physical" in metadata.keys():
             metadata.pop("physical")
 
-        # some kind of checker to determine which palette the rest uses
-        logging.debug("TODO: Determine palette by parsing the read palette")
-        guessedPalette = guessPalette(metadata["palette"])
-        metadata["palette"] = guessedPalette
 
 
-        output = open(filePath, 'wb')
-        writer = png.Writer(w, h, **metadata)
-        writer.write_array(output, pixels)
-        output.close()
-        return True
+        if guessedPalette is not None:
+            metadata["palette"] = guessedPalette
+
+
+            output = open(filePath, 'wb')
+            writer = png.Writer(w, h, **metadata)
+            writer.write_array(output, pixels)
+            output.close()
+            return True
+        else:
+            return False
 
     except FileNotFoundError:
         logging.warning("Failed with FileNotFoundError " + filePath)
@@ -68,6 +89,9 @@ def fixPalette(filePath):
         return False
     except png.FormatError:
         logging.warning("Failed with png.FormatError " + filePath)
+        return False
+    except ValueError: # contains custom raises
+        logging.warning("Failed with ValueError " + filePath)
         return False
 
 def populatePathsWithOpenXcomLogFile(logFilePath):
@@ -108,8 +132,8 @@ else:
         if fixPalette(x):
             successCounter += 1
 
-    logging.warning("Found " + str(len(filePaths)) + "broken files by parsing OpenXcom Log")
-    logging.warning("Solved " + str(successCounter) + "broken files ")
+    logging.info("Found " + str(len(filePaths)) + " broken files by parsing OpenXcom Log")
+    logging.info("Solved " + str(successCounter) + " broken files ")
 
     sys.exit(successCounter) # return how many were changed
 
