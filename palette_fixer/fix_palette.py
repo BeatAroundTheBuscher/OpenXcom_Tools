@@ -1,3 +1,10 @@
+
+# context about png - http://www.libpng.org/pub/png/spec/1.2/PNG-Chunks.html
+# used library - https://pypng.readthedocs.io/en/latest/index.html
+# read/write with library - https://stackoverflow.com/questions/64132945/with-pypng-how-do-i-read-a-png-with-it
+# about **metadata - https://www.geeksforgeeks.org/python-star-or-asterisk-operator/
+
+
 import png, re
 import sys
 
@@ -69,35 +76,4 @@ for x in filePaths:
 
 
 sys.exit(0) # return how many were changed
-
-# http://www.libpng.org/pub/png/spec/1.2/PNG-Chunks.html
-
-pngReader = png.Reader(filename='ADEPTASNBlessedNurgling.png')
-w, h, pixels, metadata = pngReader.read_flat()
-
-found = 0 # needs a cleaner way
-
-for x in pngReader.trns:
-    if x == 0:
-        break
-    found += 1
-
-print("Wrong Transparent Index found at: " + str(found))
-
-for x in range(0, len(pixels)):
-    if pixels[x] == found:
-        pixels[x] = 0
-
-if "physical" in metadata.keys():
-    metadata.pop("physical")
-
-# some kind of checker to determine which palette the rest uses
-metadata["palette"] = oxcePalettes.battlePalette
-
-
-output = open('image-with-red-dot.png', 'wb')
-writer = png.Writer(w, h, **metadata)
-writer.write_array(output, pixels)
-output.close()
-sys.exit(0)
 
