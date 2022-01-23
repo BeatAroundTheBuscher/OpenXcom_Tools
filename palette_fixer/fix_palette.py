@@ -1,4 +1,3 @@
-
 # context about png - http://www.libpng.org/pub/png/spec/1.2/PNG-Chunks.html
 # used library - https://pypng.readthedocs.io/en/latest/index.html
 # read/write with library - https://stackoverflow.com/questions/64132945/with-pypng-how-do-i-read-a-png-with-it
@@ -17,6 +16,9 @@ import logging, datetime
 
 import oxcePalettes
 
+def guessPalette(palette):
+    return oxcePalettes.battlePalette
+
 def fixPalette(filePath):
     logging.debug("Running filePath: " + filePath)
 
@@ -33,8 +35,10 @@ def fixPalette(filePath):
             found += 1
 
         logging.info("Wrong Transparent Index found at: " + str(found))
+        if found == 0:
+            logging.warning("Wrong Transparent Index SHOULD NOT BE 0")
 
-        for x in range(0, len(pixels)):
+        for x in range(0, len(pixels)): # change picture to set palette index 0 for background
             if pixels[x] == found:
                 pixels[x] = 0
         
@@ -43,9 +47,10 @@ def fixPalette(filePath):
         if "physical" in metadata.keys():
             metadata.pop("physical")
 
-        logging.debug("TODO: Determine palette by parsing the read palette")
         # some kind of checker to determine which palette the rest uses
-        metadata["palette"] = oxcePalettes.battlePalette
+        logging.debug("TODO: Determine palette by parsing the read palette")
+        guessedPalette = guessPalette(metadata["palette"])
+        metadata["palette"] = guessedPalette
 
 
         output = open(filePath, 'wb')
@@ -60,7 +65,6 @@ def fixPalette(filePath):
     except TypeError as e:
         logging.warning("Failed with TypeError " + filePath)
         logging.warning(e)
-        raise
         return False
     except png.FormatError:
         logging.warning("Failed with png.FormatError " + filePath)
@@ -82,7 +86,6 @@ def populatePathsWithOpenXcomLogFile(logFilePath):
     return populatedPathsList
 
 # grabbed from https://github.com/EttyKitty/OpenXcom_Tools/commit/19ea1661c8f20f24af9d7ed7ecf9afa6d166f622
-#LOG_FILENAME = ('crashlog.txt')
 LOG_FILENAME = "./logs/" + (datetime.datetime.now().strftime('%Y-%m-%d_%H:%M:%S.log'), 'a')[0]
 logging.basicConfig(filename=LOG_FILENAME, level=logging.INFO, filemode='w')
 
