@@ -17,7 +17,7 @@ import logging, datetime
 import oxcePalettes
 
 def guessPalette(metadata):
-    # confidence is determined by checking 16 of 256 colors and correctNumber/16
+    # confidence is determined by checking 17 of 256 colors
     # the picked colors are the diagonal from NE to SW - should be good enough for approximation
 
     if len(metadata["palette"]) != 256:
@@ -25,10 +25,11 @@ def guessPalette(metadata):
         raise ValueError("Image does not have a palette with 256 colors")
         return None
 
+    # TODO: should turn these attributes into objects
     testOrder = [oxcePalettes.battleScapeUFO, oxcePalettes.ufopaediaUFO, oxcePalettes.baseScapeUFO, oxcePalettes.geoScapeUFO]
     testOrderNames = ["battleScapeUFO", "ufopaediaUFO", "baseScapeUFO", "geoScapeUFO"]
 
-    currentTest = 0
+    currentTest = 0 # TODO: won't need this anymore once testOrder is an object
 
     for test in testOrder:
         confidence = 0 
@@ -88,6 +89,7 @@ def fixPalette(filePath):
             writer = png.Writer(w, h, **metadata)
             writer.write_array(output, pixels)
             output.close()
+            logging.info("Overwrote File successfully\n")
             return True
         else:
             return False
@@ -123,8 +125,10 @@ def populatePathsWithOpenXcomLogFile(logFilePath):
     return populatedPathsList
 
 # grabbed from https://github.com/EttyKitty/OpenXcom_Tools/commit/19ea1661c8f20f24af9d7ed7ecf9afa6d166f622
+
+# TODO: have to create a logs folder
 LOG_FILENAME = "./logs/" + (datetime.datetime.now().strftime('%Y-%m-%d_%H:%M:%S.log'), 'a')[0]
-logging.basicConfig(filename=LOG_FILENAME, level=logging.DEBUG, filemode='w')
+logging.basicConfig(filename=LOG_FILENAME, level=logging.INFO, filemode='w')
 
 
 if len(sys.argv) < 2:
