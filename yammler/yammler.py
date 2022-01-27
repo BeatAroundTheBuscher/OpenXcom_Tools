@@ -4,7 +4,7 @@ import sys, os
 import yaml
 
 sys.path.insert(0, '../commons')
-import file_handling as fh
+import file_handling as fH
 
 print(sys.argv)
 # os.chdir(sys.argv[1])
@@ -20,7 +20,7 @@ def debugPrint(debugText):
 print("Searching for Ruleset Files in:")
 for path in paths:
     print(path)
-    fileList = fh.populateFileList(path, fileList)
+    fileList = fH.populateFileList(path, fileList)
 
 print("Number of Ruleset Files: " + str(len(fileList)))
 

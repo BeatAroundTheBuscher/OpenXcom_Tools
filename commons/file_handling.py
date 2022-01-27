@@ -33,13 +33,17 @@ def isPalFile(path, fileName):
     else:
         return False
 
+def isGifFile(path, fileName):
+    if ".gif" == fileName[-4:] and isFile(path, fileName):
+        return True
+    else:
+        return False
+
 def populateFileList(path, fileList): # recursive
     for x in os.listdir(path):
         path = addTrailingSlash(path)
         if isFolder(path, x):
             fileList = populateFileList(path+x, fileList)
-        elif isRulFile(path, x):
-            fileList.append(path+x)
-        elif isPalFile(path, x):
+        elif isRulFile(path, x) or isPalFile(path, x) or isGifFile(path, x):
             fileList.append(path+x)
     return fileList
