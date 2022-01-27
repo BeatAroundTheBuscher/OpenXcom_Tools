@@ -3,6 +3,9 @@
 import sys, os
 import yaml
 
+sys.path.insert(0, '../commons')
+import file_handling as fh
+
 print(sys.argv)
 # os.chdir(sys.argv[1])
 
@@ -14,39 +17,10 @@ def debugPrint(debugText):
     if DEBUG:
         print(debugText)
 
-def addTrailingSlash(path):
-    if path[-1] != "/":
-        return (path + "/")
-    else:
-        return path
-
-def isFolder(path, fileName):
-    stMode = os.stat(path + fileName).st_mode
-    stMode //= 0x4000 # directory
-    if stMode == 1:
-        return True
-    return False
-
-def isRulFile(path, fileName):
-    stMode = os.stat(path + fileName).st_mode
-    stMode //= 0x8000 # file
-    if ".rul" == fileName[-4:] and stMode == 1:
-        return True
-    return False
-
-
-def populateFileList(path): # recursive
-    for x in os.listdir(path):
-        path = addTrailingSlash(path)
-        if isFolder(path, x):
-            populateFileList(path+x)
-        elif isRulFile(path, x):
-            fileList.append(path+x)
-
 print("Searching for Ruleset Files in:")
 for path in paths:
     print(path)
-    populateFileList(path)
+    fileList = fh.populateFileList(path, fileList)
 
 print("Number of Ruleset Files: " + str(len(fileList)))
 
