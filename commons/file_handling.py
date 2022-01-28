@@ -25,32 +25,20 @@ def isFile(path, fileName):
         return False
 
 
-def isRulFile(path, fileName):
-    if ".rul" == fileName[-4:] and isFile(path, fileName):
-        return True
-    else:
-        return False
+def isCorrectFileExtension(fileName, fileExtensions):
+    found = False
+    for ext in fileExtensions:
+        print(-(len(ext)))
+        if fileName[-(len(ext)):] == ext:
+            found = True
+    return found
 
 
-def isPalFile(path, fileName):
-    if ".pal" == fileName[-4:] and isFile(path, fileName):
-        return True
-    else:
-        return False
-
-
-def isGifFile(path, fileName):
-    if ".gif" == fileName[-4:] and isFile(path, fileName):
-        return True
-    else:
-        return False
-
-
-def populateFileList(path, fileList):  # recursive
+def populateFileList(path, fileList, fileExtensions):  # recursive
     for x in os.listdir(path):
         path = addTrailingSlash(path)
         if isFolder(path, x):
-            fileList = populateFileList(path+x, fileList)
-        elif isRulFile(path, x) or isPalFile(path, x) or isGifFile(path, x):
+            fileList = populateFileList(path+x, fileList, fileExtensions)
+        elif isFile(path, x) and isCorrectFileExtension(x, fileExtensions):
             fileList.append(path+x)
     return fileList

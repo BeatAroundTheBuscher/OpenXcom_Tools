@@ -10,6 +10,6 @@ if len(sys.argv) < 2:
 path = sys.argv[1]
 
 fileList = []
-fileList = fH.populateFileList(path, fileList)
+fileList = fH.populateFileList(path, fileList, [".gif"])
 
 print(fileList)

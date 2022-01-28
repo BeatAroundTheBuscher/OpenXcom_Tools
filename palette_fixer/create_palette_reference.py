@@ -14,7 +14,7 @@ fileList = []
 
 
 for path in paths:
-    fileList = fH.populateFileList(path, fileList)
+    fileList = fH.populateFileList(path, fileList, [".pal"])
 
 for x in fileList:
     if pickedPalette in x:

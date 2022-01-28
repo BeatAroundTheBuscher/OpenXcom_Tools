@@ -23,7 +23,7 @@ def debugPrint(debugText):
 print("Searching for Ruleset Files in:")
 for path in paths:
     print(path)
-    fileList = fH.populateFileList(path, fileList)
+    fileList = fH.populateFileList(path, fileList, [".rul"])
 
 print("Number of Ruleset Files: " + str(len(fileList)))
 
