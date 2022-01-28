@@ -1,11 +1,11 @@
-# test: python3 yammler.py ~/Games/openxcom_71_40k/user/mods/ROSIGMA/Ruleset ~/Games/openxcom_71_40k/user/mods/40k/Ruleset/
+# test: python3 yammler.py ~/Games/openxcom_71_40k/user/mods/ROSIGMA/Ruleset ~/Games/openxcom_71_40k/user/mods/40k/Ruleset/  # noqa
 
-import sys, os
+import sys
 import yaml
 import yaml.composer
 
 sys.path.insert(0, '../commons')
-import file_handling as fH
+import file_handling as fH  # noqa
 
 print(sys.argv)
 # os.chdir(sys.argv[1])
@@ -14,9 +14,11 @@ paths = sys.argv[1:]
 fileList = []
 DEBUG = False
 
+
 def debugPrint(debugText):
     if DEBUG:
         print(debugText)
+
 
 print("Searching for Ruleset Files in:")
 for path in paths:
@@ -24,6 +26,7 @@ for path in paths:
     fileList = fH.populateFileList(path, fileList)
 
 print("Number of Ruleset Files: " + str(len(fileList)))
+
 
 def tryYamlSafeLoad(fileHandler):
     try:
@@ -35,20 +38,22 @@ def tryYamlSafeLoad(fileHandler):
         print("Composer Error; Affected file: " + str(fileHandler.name))
         return dict()
 
+
 class yamlItemEntry:
     def __init__(self, yamlEntry):
-        itemName = self.safeInsert(yamlEntry, "type")
-        battleType = self.safeInsert(yamlEntry, "battleType")
-        tuAuto = self.safeInsert(yamlEntry, "tuAuto")
-        tuSnap = self.safeInsert(yamlEntry, "tuSnap")
-        tuAimed = self.safeInsert(yamlEntry, "tuAimed")
-        rosigmaComment = self.safeInsert(yamlEntry, "rosigmaComment")
+        self.itemName = self.safeInsert(yamlEntry, "type")
+        self.battleType = self.safeInsert(yamlEntry, "battleType")
+        self.tuAuto = self.safeInsert(yamlEntry, "tuAuto")
+        self.tuSnap = self.safeInsert(yamlEntry, "tuSnap")
+        self.tuAimed = self.safeInsert(yamlEntry, "tuAimed")
+        self.rosigmaComment = self.safeInsert(yamlEntry, "rosigmaComment")
 
     def safeInsert(self, yamlEntry, key):
         try:
             return yamlEntry[key]
         except KeyError:
             return ""
+
 
 yamlEntries = []
 
@@ -59,10 +64,10 @@ for filePath in fileList:
     debugPrint(yamlContent.keys())
     if "items" in yamlContent.keys():
         print(filePath)
-        #print(yamlContent["items"])
-        #print(len(yamlContent["items"]))
-        #print(type(yamlContent))
-        #print(yamlContent.keys())
+        # print(yamlContent["items"])
+        # print(len(yamlContent["items"]))
+        # print(type(yamlContent))
+        # print(yamlContent.keys())
         for x in yamlContent["items"]:
             if "type" in x.keys():
                 print(x["type"])

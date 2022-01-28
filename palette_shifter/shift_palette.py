@@ -8,8 +8,8 @@ from PIL import Image
 
 
 if len(sys.argv) < 3:
-        print("Usage: python shift_palette.py file_to_be_shifted.png command[show|replace] previous_palette_group new_palette_group")
-        sys.exit(0)
+    print("Usage: python shift_palette.py file_to_be_shifted.png command[show|replace] previous_palette_group new_palette_group") # noqa
+    sys.exit(0)
 
 
 filePath = sys.argv[1]
@@ -34,7 +34,8 @@ for pixelIndex in range(0, imgWidth*imgHeight):
         currentGroup = pixel // 16
         currentGroupIndex = pixel % 16
         if (currentGroup != 0 and currentGroupIndex != 0):
-            print("X: {} - Y: {} - GroupIndex: {} - Index % 16: {}".format(PixelX, PixelY, currentGroup, currentGroupIndex))
+            print("X: {} - Y: {} - GroupIndex: {} - Index % 16: {}".format(
+                PixelX, PixelY, currentGroup, currentGroupIndex))
 
     elif command == "replace":
         if len(sys.argv) < 5:
@@ -57,4 +58,3 @@ if command == "replace":
     img.save("shifted_" + sys.argv[1][:-3] + "png", format="png")
 
 sys.exit(0)
-

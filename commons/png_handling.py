@@ -7,6 +7,7 @@ import png
 import re
 import oxcePalettes
 
+
 def getPaletteJASC(path):
     palette = []
     print("getPalette for " + path)
@@ -18,44 +19,49 @@ def getPaletteJASC(path):
     for x in range(3, 3+256):
         lines[x] = lines[x].replace(" ", ", ")
         if x == 3:
-            lines[x] = "(" + lines[x][:-1] + ", 0)" # first one is transparent
+            # first one is transparent
+            lines[x] = "(" + lines[x][:-1] + ", 0)"
         else:
-            lines[x] = "(" + lines[x][:-1] + ", 255)" # last symbol of lines[x] is \n
+            # last symbol of lines[x] is \n
+            lines[x] = "(" + lines[x][:-1] + ", 255)"
         palette.append(lines[x])
 
     return palette
 
+
 def guessPalette(metadata):
     # confidence is determined by checking 17 of 256 colors
-    # the picked colors are the diagonal from NE to SW - should be good enough for approximation
+    # the picked colors are the diagonal from NE to SW
+    # should be good enough for approximation
 
     if len(metadata["palette"]) != 256:
         logging.error("Image does not have a palette with 256 colors")
         raise ValueError("Image does not have a palette with 256 colors")
         return None
 
-    testVector = [oxcePalettes.paletteBattleScapeUFO, oxcePalettes.paletteUfopaediaUFO,\
-        oxcePalettes.paletteBaseScapeUFO, oxcePalettes.paletteGeoScapeUFO]
-
+    testVector = [oxcePalettes.paletteBattleScapeUFO,
+                  oxcePalettes.paletteUfopaediaUFO,
+                  oxcePalettes.paletteBaseScapeUFO,
+                  oxcePalettes.paletteGeoScapeUFO]
 
     for test in testVector:
-        confidence = 0 
-        for i in [15, 30, 45, 60, 75, 90, 105, 120, 135, 150, 165, 180, 195, 210, 225, 240, 255]:
+        confidence = 0
+        for i in [15, 30, 45, 60, 75, 90, 105, 120, 135, 150, 165, 180, 195,
+                  210, 225, 240, 255]:
             logging.debug("test value: " + str(test.paletteData[i]))
             logging.debug("palette value: " + str(metadata["palette"][i]))
             if test.paletteData[i][0:3] == metadata["palette"][i][0:3]:
                 confidence += 1
         logging.debug("\nConfidence: " + str(confidence))
 
-        if confidence > 13: # of 17
+        if confidence > 13:  # of 17
             logging.info("Guessed Palette: " + test.name)
             return test
-        
-
 
     logging.info("Failed to guess palette")
     raise ValueError("No known palette")
     return None
+
 
 def fixPalette(filePath):
     logging.info("Running filePath: " + filePath)
@@ -65,11 +71,12 @@ def fixPalette(filePath):
         pngReader = png.Reader(filename=filePath)
         w, h, pixels, metadata = pngReader.read_flat()
 
-        guessedPalette = guessPalette(metadata) # 1CH.png
+        guessedPalette = guessPalette(metadata)  # 1CH.png
 
-        found = 0 # needs a cleaner way
+        found = 0  # needs a cleaner way
 
-        if pngReader.trns != None: # TODO: Scan for what the oxce log actually says
+        # TODO: Scan for what the oxce log actually says
+        if pngReader.trns is not None:
             for x in pngReader.trns:
                 if x == 0:
                     break
@@ -80,10 +87,10 @@ def fixPalette(filePath):
                 logging.warning("Wrong Transparent Index SHOULD NOT BE 0")
 
         if found != 0:
-            for x in range(0, len(pixels)): # change picture to set palette index 0 for background
+            # change picture to set palette index 0 for background
+            for x in range(0, len(pixels)):
                 if pixels[x] == found:
                     pixels[x] = 0
-        
 
         logging.debug("Removing 'physical' key from 'metadata'")
         if "physical" in metadata.keys():
@@ -92,7 +99,7 @@ def fixPalette(filePath):
         if guessedPalette is not None:
             metadata["palette"] = guessedPalette
 
-            output = open(filePath, 'wb') # save result
+            output = open(filePath, 'wb')  # save result
             writer = png.Writer(w, h, **metadata)
             writer.write_array(output, pixels)
             output.close()
@@ -100,8 +107,8 @@ def fixPalette(filePath):
             return True
         else:
             return False
-    
-    except FileNotFoundError: # may hide other errors
+
+    except FileNotFoundError:  # may hide other errors
         logging.warning("Failed with FileNotFoundError " + filePath)
         return False
     except TypeError as e:
@@ -111,11 +118,9 @@ def fixPalette(filePath):
     except png.FormatError:
         logging.warning("Failed with png.FormatError " + filePath)
         return False
-    except ValueError: # contains custom raises
+    except ValueError:  # contains custom raises
         logging.warning("Failed with ValueError " + filePath)
         return False
-    
-
 
 
 def xcom_crop(inputPNG, width, height, tilePieces):
@@ -127,6 +132,7 @@ def xcom_crop(inputPNG, width, height, tilePieces):
             pic = img.crop(box)
             tilePieces.append(pic)
     return tilePieces
+
 
 """
 # test putting split parts back to sprite sheet
@@ -146,20 +152,22 @@ def recreateSpritesheet(tilePiecesList):
                     tileX * tileWidth + relativePixelX,\
                     tileY * tileHeight + relativePixelY),\
                     pixel)
-    
+
     return img
 
 img = recreateSpritesheet(tilePieces)
 """
 
 
-
-def mergeSpritesheet(readFilePath, tileWidth, tileHeight, tilePiecesList, mergedWidth, mergedHeight, mergedList, piecesPerRow, x, y):
-    img = Image.open(readFilePath) # contains palette
+def mergeSpritesheet(readFilePath, tileWidth, tileHeight, tilePiecesList,
+                     mergedWidth, mergedHeight, mergedList, piecesPerRow,
+                     x, y):
+    img = Image.open(readFilePath)  # contains palette
     palette = img.getpalette()
     # https://stackoverflow.com/questions/52307290/what-is-the-difference-between-images-in-p-and-l-mode-in-pil
-    img = Image.new('P',(x,y),0) # 'P' for paletted 
-    img.putpalette(palette, 'RGB') # TODO: Figure out how to set palette properly
+    img = Image.new('P', (x, y), 0)  # 'P' for paletted
+    # TODO: Figure out how to set palette properly
+    img.putpalette(palette, 'RGB')
     for i in range(0, len(mergedList)):
         # selectedTiles
         tile0 = tilePiecesList[mergedList[i][0]]
@@ -170,28 +178,36 @@ def mergeSpritesheet(readFilePath, tileWidth, tileHeight, tilePiecesList, merged
         offsetX = int(i % piecesPerRow) * mergedWidth
         offsetY = int(i / piecesPerRow) * mergedHeight
 
-        img = drawPart(img, tile0, tileWidth, tileHeight, offsetX + 16, offsetY + 0)  # top
-        img = drawPart(img, tile1, tileWidth, tileHeight, offsetX + 32, offsetY + 8)  # right
-        img = drawPart(img, tile2, tileWidth, tileHeight, offsetX + 0, offsetY + 8)   # left
-        img = drawPart(img, tile3, tileWidth, tileHeight, offsetX + 16, offsetY + 16) # bottom
+        img = drawPart(img, tile0, tileWidth, tileHeight,
+                       offsetX + 16, offsetY + 0)       # top
+        img = drawPart(img, tile1, tileWidth, tileHeight,
+                       offsetX + 32, offsetY + 8)       # right
+        img = drawPart(img, tile2, tileWidth, tileHeight,
+                       offsetX + 0, offsetY + 8)        # left
+        img = drawPart(img, tile3, tileWidth, tileHeight,
+                       offsetX + 16, offsetY + 16)      # bottom
     return img
 
-def mergeGunSpritesheet(img, tileWidth, tileHeight, tilePieces, offsetIndex, offsetMax, piecesPerRow, negativeOffsetY):
+
+def mergeGunSpritesheet(img, tileWidth, tileHeight, tilePieces, offsetIndex,
+                        offsetMax, piecesPerRow, negativeOffsetY):
     for i in range(offsetIndex, offsetMax):
         offsetX = int(i % piecesPerRow) * (tileWidth + 1)
         offsetY = int(i / piecesPerRow) * (tileHeight + 1)
-        img = drawPart(img, tilePieces[i], tileWidth, tileHeight, offsetX, offsetY - negativeOffsetY)
+        img = drawPart(img, tilePieces[i], tileWidth, tileHeight, offsetX,
+                       offsetY - negativeOffsetY)
     return img
+
 
 def drawPart(img, selectedTile, tileWidth, tileHeight, offsetX, offsetY):
     for pixelIndex in range(0, tileWidth*tileHeight):
         relativePixelX = int(pixelIndex % tileWidth)
         relativePixelY = int(pixelIndex / tileWidth)
-        pixel = int(selectedTile.getpixel((\
+        pixel = int(selectedTile.getpixel((
             relativePixelX, relativePixelY)))
         if pixel != 0:
-            img.putpixel((\
-                offsetX + relativePixelX,\
-                offsetY + relativePixelY),\
+            img.putpixel((
+                offsetX + relativePixelX,
+                offsetY + relativePixelY),
                 pixel)
     return img

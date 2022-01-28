@@ -1,10 +1,11 @@
-# this file needs an folder oxcePalettes in which the content of /common/Palettes/ has been copied into
+# this file needs an folder oxcePalettes
+# in which the content of /common/Palettes/ has been copied into
 
-import os, sys
+import sys
 
 sys.path.insert(0, '../commons')
-import file_handling as fH
-import png_handling as pngH
+import file_handling as fH  # noqa
+import png_handling as pngH  # noqa
 
 paths = ["oxcePalettes"]
 # pickedPalette = "UFO-JASC-SAFE"
@@ -21,4 +22,3 @@ for x in fileList:
         print(palette)
 
 sys.exit(0)
-
