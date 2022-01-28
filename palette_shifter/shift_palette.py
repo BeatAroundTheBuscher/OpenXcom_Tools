@@ -1,3 +1,5 @@
+# test: python3 shift_palette.py merged_sentinel_heavy_plasma.png replace 4 8
+
 # https://pillow.readthedocs.io/en/stable/reference/Image.html
 
 import sys

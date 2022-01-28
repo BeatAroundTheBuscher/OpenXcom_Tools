@@ -1,9 +1,6 @@
-# https://pillow.readthedocs.io/en/stable/reference/Image.html
-# https://stackoverflow.com/posts/7051075/revisions
+# test: python3 merge_2x2_spritesheet.py sentinel_heavy_plasma.png 20
 
 import sys
-
-
 import drawing_routines
 
 sys.path.insert(0, '../commons')
@@ -24,6 +21,9 @@ if len(sys.argv) < 3:
 
 chosenMergedList = []
 piecesPerRow = 0
+
+x, y = 0, 0
+
 if int(sys.argv[2]) == 2:
     chosenMergedList = drawing_routines.mergedList_DR2 # seems to create artefacts on propulsion
     piecesPerRow = 8

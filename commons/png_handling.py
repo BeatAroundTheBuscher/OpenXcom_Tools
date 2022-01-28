@@ -1,4 +1,11 @@
+# https://pillow.readthedocs.io/en/stable/reference/Image.html
+# https://stackoverflow.com/posts/7051075/revisions
+
 from PIL import Image
+import logging
+import png
+import re
+import oxcePalettes
 
 def getPaletteJASC(path):
     palette = []
@@ -27,26 +34,24 @@ def guessPalette(metadata):
         raise ValueError("Image does not have a palette with 256 colors")
         return None
 
-    # TODO: should turn these attributes into objects
-    testOrder = [oxcePalettes.battleScapeUFO, oxcePalettes.ufopaediaUFO, oxcePalettes.baseScapeUFO, oxcePalettes.geoScapeUFO]
-    testOrderNames = ["battleScapeUFO", "ufopaediaUFO", "baseScapeUFO", "geoScapeUFO"]
+    testVector = [oxcePalettes.paletteBattleScapeUFO, oxcePalettes.paletteUfopaediaUFO,\
+        oxcePalettes.paletteBaseScapeUFO, oxcePalettes.paletteGeoScapeUFO]
 
-    currentTest = 0 # TODO: won't need this anymore once testOrder is an object
 
-    for test in testOrder:
+    for test in testVector:
         confidence = 0 
         for i in [15, 30, 45, 60, 75, 90, 105, 120, 135, 150, 165, 180, 195, 210, 225, 240, 255]:
-            logging.debug("test value: " + str(test[i]))
+            logging.debug("test value: " + str(test.paletteData[i]))
             logging.debug("palette value: " + str(metadata["palette"][i]))
-            if test[i][0:3] == metadata["palette"][i][0:3]:
+            if test.paletteData[i][0:3] == metadata["palette"][i][0:3]:
                 confidence += 1
         logging.debug("\nConfidence: " + str(confidence))
 
         if confidence > 13: # of 17
-            logging.info("Guessed Palette: " + testOrderNames[currentTest])
+            logging.info("Guessed Palette: " + test.name)
             return test
         
-        currentTest += 1
+
 
     logging.info("Failed to guess palette")
     raise ValueError("No known palette")
@@ -59,12 +64,12 @@ def fixPalette(filePath):
     try:
         pngReader = png.Reader(filename=filePath)
         w, h, pixels, metadata = pngReader.read_flat()
-    
+
         guessedPalette = guessPalette(metadata) # 1CH.png
 
         found = 0 # needs a cleaner way
 
-        if pngReader.trns != None: # todo: Scan for what the log actually says
+        if pngReader.trns != None: # TODO: Scan for what the oxce log actually says
             for x in pngReader.trns:
                 if x == 0:
                     break
@@ -154,7 +159,7 @@ def mergeSpritesheet(readFilePath, tileWidth, tileHeight, tilePiecesList, merged
     palette = img.getpalette()
     # https://stackoverflow.com/questions/52307290/what-is-the-difference-between-images-in-p-and-l-mode-in-pil
     img = Image.new('P',(x,y),0) # 'P' for paletted 
-    img.putpalette(palette, 'RGB')
+    img.putpalette(palette, 'RGB') # TODO: Figure out how to set palette properly
     for i in range(0, len(mergedList)):
         # selectedTiles
         tile0 = tilePiecesList[mergedList[i][0]]
@@ -175,7 +180,7 @@ def mergeGunSpritesheet(img, tileWidth, tileHeight, tilePieces, offsetIndex, off
     for i in range(offsetIndex, offsetMax):
         offsetX = int(i % piecesPerRow) * (tileWidth + 1)
         offsetY = int(i / piecesPerRow) * (tileHeight + 1)
-        img = drawPart(img, tilePieces[i], offsetX, offsetY - negativeOffsetY)
+        img = drawPart(img, tilePieces[i], tileWidth, tileHeight, offsetX, offsetY - negativeOffsetY)
     return img
 
 def drawPart(img, selectedTile, tileWidth, tileHeight, offsetX, offsetY):

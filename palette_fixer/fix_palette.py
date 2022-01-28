@@ -34,7 +34,7 @@ if len(sys.argv) < 2:
     sys.exit(0)
 
 if len(sys.argv) < 3:
-    fixPalette(sys.argv[1])
+    pngH.fixPalette(sys.argv[1])
 else:
     filePaths = oxceH.populatePathsWithOpenXcomLogFile(sys.argv[1])
 

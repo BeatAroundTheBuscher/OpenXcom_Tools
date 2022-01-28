@@ -1,7 +1,8 @@
-# python3 yammler.py ~/Games/openxcom_71_40k/user/mods/ROSIGMA/Ruleset ~/Games/openxcom_71_40k/user/mods/40k/Ruleset/
+# test: python3 yammler.py ~/Games/openxcom_71_40k/user/mods/ROSIGMA/Ruleset ~/Games/openxcom_71_40k/user/mods/40k/Ruleset/
 
 import sys, os
 import yaml
+import yaml.composer
 
 sys.path.insert(0, '../commons')
 import file_handling as fH
