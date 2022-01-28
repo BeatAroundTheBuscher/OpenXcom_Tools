@@ -42,7 +42,11 @@ def guessPalette(metadata):
     testVector = [oxcePalettes.paletteBattleScapeUFO,
                   oxcePalettes.paletteUfopaediaUFO,
                   oxcePalettes.paletteBaseScapeUFO,
-                  oxcePalettes.paletteGeoScapeUFO]
+                  oxcePalettes.paletteGeoScapeUFO,
+                  oxcePalettes.paletteBattlePediaUFO,
+                  oxcePalettes.paletteGraphsUFO,
+                  oxcePalettes.paletteBattleCommonUFO,
+                  oxcePalettes.paletteBackgroundUFO]
 
     for test in testVector:
         confidence = 0
@@ -56,7 +60,7 @@ def guessPalette(metadata):
 
         if confidence > 13:  # of 17
             logging.info("Guessed Palette: " + test.name)
-            return test
+            return test.paletteData
 
     logging.info("Failed to guess palette")
     raise ValueError("No known palette")

@@ -28,7 +28,6 @@ def isFile(path, fileName):
 def isCorrectFileExtension(fileName, fileExtensions):
     found = False
     for ext in fileExtensions:
-        print(-(len(ext)))
         if fileName[-(len(ext)):] == ext:
             found = True
     return found
