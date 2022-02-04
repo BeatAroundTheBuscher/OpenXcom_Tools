@@ -45,6 +45,10 @@ for pixelIndex in range(0, imgWidth*imgHeight):
         newGroup = int(sys.argv[4])
         currentGroup = pixel // 16
         currentGroupIndex = pixel % 16
+        if len(sys.argv) == 6:
+            currentGroupIndex += int(sys.argv[5])
+            if currentGroupIndex > 15:
+                currentGroupIndex = 15
         # print(previousGroup, newGroup, currentGroup)
         if currentGroup == previousGroup:
             currentGroup = newGroup
