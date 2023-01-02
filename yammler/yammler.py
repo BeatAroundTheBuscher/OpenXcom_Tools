@@ -1,5 +1,3 @@
-# test: python3 yammler.py ~/Games/openxcom_71_40k/user/mods/ROSIGMA/Ruleset ~/Games/openxcom_71_40k/user/mods/40k/Ruleset/  # noqa
-
 import sys
 import yaml
 import yaml.composer
@@ -34,17 +32,18 @@ def debugPrint(debugText):
 """
 
 
-print("Searching for Ruleset Files in:")
+logging.info("Searching for Ruleset Files in:")
 for path in paths:
-    print(path)
+    logging.info(path)
     fileList = fH.populateFileList(path, fileList, [".rul"])
 
-print("Number of Ruleset Files: " + str(len(fileList)))
+logging.info("Number of Ruleset Files: " + str(len(fileList)))
 
 
 def yamlAdd(loader, node):
     pass
     return ""
+
 
 def yamlRemove(loader, node):
     print("yamlRemover")
@@ -56,32 +55,29 @@ def yamlRemove(loader, node):
 # https://www.programcreek.com/python/example/11269/yaml.add_constructor
 # https://python.hotexamples.com/examples/yaml/Loader/add_constructor/python-loader-add_constructor-method-examples.html
 
-yaml.SafeLoader.add_constructor('!add', yamlRemove)
+
+yaml.SafeLoader.add_constructor('!add', yamlAdd)
 yaml.SafeLoader.add_constructor('!remove', yamlRemove)
 
 
 def tryYamlSafeLoad(fileHandler):
-
-
     try:
         return yaml.safe_load(fileHandler)
     except yaml.constructor.ConstructorError as e:
-        logging.error("Constructor Error; Affected file: " + str(fileHandler.name))
+        logging.error("Constructor Error; Affected file: "
+                      + str(fileHandler.name))
         logging.error(e)
         return dict()
     except yaml.composer.ComposerError as e:
-        logging.error("Composer Error; Affected file: " + str(fileHandler.name))
+        logging.error("Composer Error; Affected file: "
+                      + str(fileHandler.name))
         logging.error(e)
         return dict()
-
-
-
-
-
 
 
 class yamlItemEntry:
     def __init__(self, yamlEntry):
+        self.name = self.safeInsert(yamlEntry, "name")
         self.itemName = self.safeInsert(yamlEntry, "type")
         self.battleType = self.safeInsert(yamlEntry, "battleType")
         self.tuAuto = self.safeInsert(yamlEntry, "tuAuto")
@@ -97,31 +93,65 @@ class yamlItemEntry:
 
 
 yamlEntries = []
+yamlDict = {}
 
 for filePath in fileList:
     yamlFile = open(filePath, 'r')
-    yamlContent = tryYamlSafeLoad(yamlFile)
+    yamlLoad = tryYamlSafeLoad(yamlFile)
     logging.debug(filePath)
-    logging.debug(yamlContent.keys())
-    if "items" in yamlContent.keys():
+    logging.debug(yamlLoad.keys())
+
+    for yamlKey in yamlLoad.keys():
+        if yamlKey not in yamlDict:
+            yamlDict[yamlKey] = []
+
+        yamlDict[yamlKey].append(yamlLoad[yamlKey])
+
+    yamlFile.close()
+logging.debug(yamlDict.keys())
+
+for x in yamlDict.keys():
+    logging.debug(x)
+    logging.debug(yamlDict[x])
+
+
+"""
+logging.debug("DONE - PRINTING RESULTS")
+logging.debug("Type: " + str(type(yamlEntries)))
+logging.debug("Length: " + str(len(yamlEntries)))
+for x in yamlEntries:
+    logging.debug(x.itemName)
+"""
+
+"""
+        try:
+            for yamlContent in yamlLoad[yamlKey]:
+                print(yamlContent)
+                print(type(yamlContent))
+                if "name" in yamlContent.keys():
+                    print(yamlContent["name"])
+                if "id" in yamlContent.keys():
+                    print(yamlContent["id"])
+                if "type" in yamlContent.keys():
+                    print(yamlContent["type"])
+                yamlDict[yamlKey].append(yamlContent)
+        except TypeError:
+            logging.warn("TypeError: Ignored " + str(yamlKey))
+        # sys.exit(1)
+
+"""
+
+"""
+    if "items" in yamlLoad.keys():
         print(filePath)
-        # print(yamlContent["items"])
-        # print(len(yamlContent["items"]))
-        # print(type(yamlContent))
-        # print(yamlContent.keys())
-        for x in yamlContent["items"]:
+        # print(yamlLoad["items"])
+        # print(len(yamlLoad["items"]))
+        # print(type(yamlLoad))
+        # print(yamlLoad.keys())
+        for x in yamlLoad["items"]:
             if "type" in x.keys():
                 # print(x["type"])
                 # print(x)
                 yamlEntries.append(yamlItemEntry(x))
         # break
-    yamlFile.close()
-
-
-logging.debug("DONE - PRINTING RESULTS")
-logging.debug("Type: " + str(type(yamlEntries)))
-logging.debug("Length: " + str(len(yamlEntries)))
-logging.debug(yamlEntries)
-for x in yamlEntries:
-    logging.debug(x.itemName)
-
+"""
