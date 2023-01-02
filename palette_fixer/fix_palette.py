@@ -21,17 +21,16 @@ import oxce_handling as oxceH  # noqa
 
 # grabbed from https://github.com/EttyKitty/OpenXcom_Tools/commit/19ea1661c8f20f24af9d7ed7ecf9afa6d166f622  # noqa
 
-# TODO: have to create a logs folder
-LOG_FILENAME = "./logs/" + (datetime.datetime.now().strftime(
-                            '%Y-%m-%d_%H:%M:%S.log'), 'a')[0]
-logging.basicConfig(filename=LOG_FILENAME, level=logging.DEBUG, filemode='w')
-
-
 if len(sys.argv) < 2:
     print("Usage: fix_palette.py path-to-openxcom.log path-to-mod-root-dictionary")  # noqa
     print("OR")
     print("Usage: fix_palette.py path-to-image.png")
     sys.exit(0)
+
+# TODO: have to create a logs folder
+LOG_FILENAME = "./logs/" + (datetime.datetime.now().strftime(
+                            '%Y-%m-%d_%H:%M:%S.log'), 'a')[0]
+logging.basicConfig(filename=LOG_FILENAME, level=logging.DEBUG, filemode='w')
 
 if len(sys.argv) < 3:
     pngH.fixPalette(sys.argv[1])

@@ -4,20 +4,34 @@ import sys
 import yaml
 import yaml.composer
 
+import logging
+import datetime
+
 sys.path.insert(0, '../commons')
 import file_handling as fH  # noqa
+
+if len(sys.argv) < 2:
+    print("Usage: yammler.py path-to-mod-root-dictionary")  # noqa
+    sys.exit(0)
+
+# TODO: have to create a logs folder
+LOG_FILENAME = "./logs/" + (datetime.datetime.now().strftime(
+                            '%Y-%m-%d_%H:%M:%S.log'), 'a')[0]
+logging.basicConfig(filename=LOG_FILENAME, level=logging.DEBUG, filemode='w')
 
 print(sys.argv)
 # os.chdir(sys.argv[1])
 
 paths = sys.argv[1:]
 fileList = []
-DEBUG = False
 
+"""
+DEBUG = False
 
 def debugPrint(debugText):
     if DEBUG:
         print(debugText)
+"""
 
 
 print("Searching for Ruleset Files in:")
@@ -30,12 +44,12 @@ print("Number of Ruleset Files: " + str(len(fileList)))
 
 def tryYamlSafeLoad(fileHandler):
     try:
-        return yaml.safe_load(yamlFile)
+        return yaml.safe_load(fileHandler)
     except yaml.constructor.ConstructorError:
-        print("Constructor Error; Affected file: " + str(fileHandler.name))
+        logging.error("Constructor Error; Affected file: " + str(fileHandler.name))
         return dict()
     except yaml.composer.ComposerError:
-        print("Composer Error; Affected file: " + str(fileHandler.name))
+        logging.error("Composer Error; Affected file: " + str(fileHandler.name))
         return dict()
 
 
@@ -60,8 +74,8 @@ yamlEntries = []
 for filePath in fileList:
     yamlFile = open(filePath, 'r')
     yamlContent = tryYamlSafeLoad(yamlFile)
-    debugPrint(filePath)
-    debugPrint(yamlContent.keys())
+    logging.debug(filePath)
+    logging.debug(yamlContent.keys())
     if "items" in yamlContent.keys():
         print(filePath)
         # print(yamlContent["items"])
@@ -73,7 +87,9 @@ for filePath in fileList:
                 print(x["type"])
                 print(x)
                 yamlEntries.append(yamlItemEntry(x))
-        break
+        # break
     yamlFile.close()
 
-print(yamlEntries)
+logging.debug(yamlEntries)
+print(type(yamlEntries))
+print(len(yamlEntries))
