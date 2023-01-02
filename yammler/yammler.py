@@ -42,15 +42,42 @@ for path in paths:
 print("Number of Ruleset Files: " + str(len(fileList)))
 
 
+def yamlAdd(loader, node):
+    pass
+    return ""
+
+def yamlRemove(loader, node):
+    print("yamlRemover")
+    print(loader)
+    print(node)
+    return ""
+
+# https://stackoverflow.com/questions/45966633/yaml-error-could-not-determine-a-constructor-for-the-tag
+# https://www.programcreek.com/python/example/11269/yaml.add_constructor
+# https://python.hotexamples.com/examples/yaml/Loader/add_constructor/python-loader-add_constructor-method-examples.html
+
+yaml.SafeLoader.add_constructor('!add', yamlRemove)
+yaml.SafeLoader.add_constructor('!remove', yamlRemove)
+
+
 def tryYamlSafeLoad(fileHandler):
+
+
     try:
         return yaml.safe_load(fileHandler)
-    except yaml.constructor.ConstructorError:
+    except yaml.constructor.ConstructorError as e:
         logging.error("Constructor Error; Affected file: " + str(fileHandler.name))
+        logging.error(e)
         return dict()
-    except yaml.composer.ComposerError:
+    except yaml.composer.ComposerError as e:
         logging.error("Composer Error; Affected file: " + str(fileHandler.name))
+        logging.error(e)
         return dict()
+
+
+
+
+
 
 
 class yamlItemEntry:
@@ -84,12 +111,17 @@ for filePath in fileList:
         # print(yamlContent.keys())
         for x in yamlContent["items"]:
             if "type" in x.keys():
-                print(x["type"])
-                print(x)
+                # print(x["type"])
+                # print(x)
                 yamlEntries.append(yamlItemEntry(x))
         # break
     yamlFile.close()
 
+
+logging.debug("DONE - PRINTING RESULTS")
+logging.debug("Type: " + str(type(yamlEntries)))
+logging.debug("Length: " + str(len(yamlEntries)))
 logging.debug(yamlEntries)
-print(type(yamlEntries))
-print(len(yamlEntries))
+for x in yamlEntries:
+    logging.debug(x.itemName)
+
