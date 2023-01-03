@@ -30,7 +30,7 @@ if len(sys.argv) < 2:
 # TODO: have to create a logs folder
 LOG_FILENAME = "./logs/" + (datetime.datetime.now().strftime(
                             '%Y-%m-%d_%H:%M:%S.log'), 'a')[0]
-logging.basicConfig(filename=LOG_FILENAME, level=logging.DEBUG, filemode='w')
+logging.basicConfig(filename=LOG_FILENAME, level=logging.INFO, filemode='w')
 
 if len(sys.argv) < 3:
     pngH.fixPalette(sys.argv[1])
