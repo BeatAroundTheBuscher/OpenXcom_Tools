@@ -92,10 +92,27 @@ class yamlItemEntry:
             return ""
 
 
+def extractYamlItems(yamlLoad, yamlKey, subNodeFilter):
+    yamlInsertList = []
+    if type(yamlLoad[yamlKey]) is list:
+        logging.debug("yamlLoad[yamlKey]: " + str(yamlLoad[yamlKey]))
+        for yamlItem in yamlLoad[yamlKey]:
+            logging.debug("yamlItem: " + str(yamlItem))
+            if type(yamlItem) is dict:
+                for node in yamlItem.keys():
+                    logging.debug("node: " + str(node))
+                    if len(subNodeFilter) == 0 or node in subNodeFilter:
+                        yamlInsertDict = {node: yamlItem[node]}
+                        yamlInsertList.append(yamlInsertDict)
+    return yamlInsertList
+
+
 yamlEntries = []
 yamlDict = {}
-filter = ["manufacture", "soldiers", "items"]
-filter = []
+mainNodeFilter = ["manufacture", "soldiers", "items"]
+mainNodeFilter = []
+subNodeFilter = ["type", "name", "id"]
+# subNodeFilter = []
 
 for filePath in fileList:
     yamlFile = open(filePath, 'r')
@@ -113,12 +130,12 @@ for filePath in fileList:
     logging.debug(yamlLoad.keys())
 
     for yamlKey in yamlLoad.keys():
-        if len(filter) == 0 or yamlKey in filter:
+        if len(mainNodeFilter) == 0 or yamlKey in mainNodeFilter:
             if yamlKey not in yamlDict:
                 yamlDict[yamlKey] = []
 
-            yamlDict[yamlKey].append(yamlLoad[yamlKey])
-
+            yamlInsertList = extractYamlItems(yamlLoad, yamlKey, subNodeFilter)
+            yamlDict[yamlKey].append(yamlInsertList)
     yamlFile.close()
 
 
