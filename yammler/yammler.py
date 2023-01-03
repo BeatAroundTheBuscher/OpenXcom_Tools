@@ -4,7 +4,7 @@ import datetime
 
 sys.path.insert(0, './commons')
 import file_handling as fH  # noqa
-import yaml_handling as yH  # noqa
+import yaml_handling as yH  # type: ignore # noqa
 
 if len(sys.argv) < 2:
     print("Usage: yammler.py path-to-mod-root-dictionary")  # noqa
@@ -13,118 +13,68 @@ if len(sys.argv) < 2:
 # TODO: have to create a logs folder
 LOG_FILENAME = "./logs/" + ("yammler_" + datetime.datetime.now().strftime(
                             '%Y-%m-%d_%H:%M:%S.log'), 'a')[0]
-logging.basicConfig(filename=LOG_FILENAME, level=logging.DEBUG, filemode='w')
-
-print(sys.argv)
-# os.chdir(sys.argv[1])
+logging.basicConfig(filename=LOG_FILENAME, level=logging.INFO, filemode='w')
 
 paths = sys.argv[1:]
-fileList = []
 
-"""
-DEBUG = False
-
-def debugPrint(debugText):
-    if DEBUG:
-        print(debugText)
-"""
-
-
-logging.info("Searching for Ruleset Files in:")
-for path in paths:
-    logging.info(path)
-    fileList = fH.populateFileList(path, fileList, [".rul"])
-
-logging.info("Number of Ruleset Files: " + str(len(fileList)))
-
-# https://stackoverflow.com/questions/45966633/yaml-error-could-not-determine-a-constructor-for-the-tag
-# https://www.programcreek.com/python/example/11269/yaml.add_constructor
-# https://python.hotexamples.com/examples/yaml/Loader/add_constructor/python-loader-add_constructor-method-examples.html
-
-yH.addOXCEConstructors()
-
-yamlEntries = []
-yamlDict = {}
-mainNodeFilter = ["items"]
-# mainNodeFilter = []
+# mainNodeFilter = ["items"]
+mainNodeFilter = ["alienDeployments", "alienMissions", "alienRaces",
+                  "arcScripts", "armors", "eventScripts",
+                  "alienMissions", "enviroEffects", "units", "soldiers",
+                  "facilities", "research", "ufopaedia"]
 subNodeFilter = ["type", "name", "id"]
 # subNodeFilter = []
 
-for filePath in fileList:
-    yamlFile = open(filePath, 'r')
-    yamlLoad = yH.tryYamlSafeLoad(yamlFile)
+for path in paths:
+    print(path)
 
-    # tryYamlSafeLoad returns a dict
-    # that includes a list that consists of dicts
-    # <class 'dict'> # print(type(yamlLoad))
-    # <class 'list'> # print(type(yamlLoad["manufacture"]))
-    # <class 'dict'> # print(type(yamlLoad["manufacture"][0]))
-    # final entries like name returns 'str'
-    # entries with lists like requires return another list with 'str'
+    fileList = []
 
-    logging.debug(filePath)
-    logging.debug(yamlLoad.keys())
+    logging.info("Searching for Ruleset Files in:")
+    logging.info(path)
+    fileList = fH.populateFileList(path, fileList, [".rul"])
 
-    for yamlKey in yamlLoad.keys():
-        if len(mainNodeFilter) == 0 or yamlKey in mainNodeFilter:
-            if yamlKey not in yamlDict:
-                yamlDict[yamlKey] = []
+    logging.info("Number of Ruleset Files: " + str(len(fileList)))
 
-            yamlInsertList = yH.extractYamlItems(
-                                yamlLoad, yamlKey, subNodeFilter)
-            yamlDict[yamlKey].append(yamlInsertList)
-    yamlFile.close()
+    # https://stackoverflow.com/questions/45966633/yaml-error-could-not-determine-a-constructor-for-the-tag
+    # https://www.programcreek.com/python/example/11269/yaml.add_constructor
+    # https://python.hotexamples.com/examples/yaml/Loader/add_constructor/python-loader-add_constructor-method-examples.html
 
+    yH.addOXCEConstructors()
 
-logging.debug(yamlDict.keys())
+    yamlEntries = []
+    yamlDict = {}
 
+    for filePath in fileList:
+        yamlFile = open(filePath, 'r')
+        yamlLoad = yH.tryYamlSafeLoad(yamlFile)
 
-for x in yamlDict.keys():
-    with open("./output/" + str(x) + ".yaml", 'w') as file:
-        yH.dumpOXCEYamlFiles(yamlDict, file)
+        # tryYamlSafeLoad returns a dict
+        # that includes a list that consists of dicts
+        # <class 'dict'> # print(type(yamlLoad))
+        # <class 'list'> # print(type(yamlLoad["manufacture"]))
+        # <class 'dict'> # print(type(yamlLoad["manufacture"][0]))
+        # final entries like name returns 'str'
+        # entries with lists like requires return another list with 'str'
 
-# for x in yamlDict.keys():
-#    logging.debug(x)
-#    logging.debug(yamlDict[x])
+        logging.debug(filePath)
+        logging.debug(yamlLoad.keys())
 
+        for yamlKey in yamlLoad.keys():
+            if len(mainNodeFilter) == 0 or yamlKey in mainNodeFilter:
+                if yamlKey not in yamlDict:
+                    yamlDict[yamlKey] = []
 
-"""
-logging.debug("DONE - PRINTING RESULTS")
-logging.debug("Type: " + str(type(yamlEntries)))
-logging.debug("Length: " + str(len(yamlEntries)))
-for x in yamlEntries:
-    logging.debug(x.itemName)
-"""
+                yamlInsertList = yH.extractYamlItems(
+                                    yamlLoad, yamlKey, subNodeFilter)
+                yamlDict[yamlKey].append(yamlInsertList)
+        yamlFile.close()
 
-"""
-        try:
-            for yamlContent in yamlLoad[yamlKey]:
-                print(yamlContent)
-                print(type(yamlContent))
-                if"name" in yamlContent.keys():
-                    print(yamlContent["name"])
-                if "id" in yamlContent.keys():
-                    print(yamlContent["id"])
-                if "type" in yamlContent.keys():
-                    print(yamlContent["type"])
-                yamlDict[yamlKey].append(yamlContent)
-        except TypeError:
-            logging.warn("TypeError: Ignored " + str(yamlKey))
-        # sys.exit(1)
+    logging.debug(yamlDict.keys())
 
-"""
+    for yamlKey in yamlDict.keys():
+        with open("./output/" + str((path.split("/")[-1])) +
+                  "_" + str(yamlKey) + ".yaml", 'w') as file:
+            yH.dumpOXCEYamlFiles(yamlDict, yamlKey, file)
 
-"""
-    if "items" in yamlLoad.keys():
-        print(filePath)
-        # print(yamlLoad["items"])
-        # print(len(yamlLoad["items"]))
-        # print(type(yamlLoad))
-        # print(yamlLoad.keys())
-        for x in yamlLoad["items"]:
-            if "type" in x.keys():
-                # print(x["type"])
-                # print(x)
-                yamlEntries.append(yamlItemEntry(x))
-        # break
-"""
+print("end")

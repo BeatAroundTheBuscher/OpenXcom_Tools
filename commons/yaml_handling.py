@@ -9,9 +9,12 @@ def yamlAdd(loader, node):
 
 
 def yamlRemove(loader, node):
+    pass
+    """
     print("yamlRemover")
     print(loader)
     print(node)
+    """
     return ""
 
 
@@ -70,5 +73,6 @@ def addOXCEConstructors():
     yaml.SafeLoader.add_constructor('!remove', yamlRemove)
 
 
-def dumpOXCEYamlFiles(yamlDict, file):
-    yaml.dump(yamlDict, file)
+def dumpOXCEYamlFiles(yamlDict, yamlKey, file):
+    if len(yamlDict[yamlKey]) > 0:
+        yaml.dump(yamlDict[yamlKey], file)
