@@ -95,22 +95,25 @@ class yamlItemEntry:
 def extractYamlItems(yamlLoad, yamlKey, subNodeFilter):
     yamlInsertList = []
     if type(yamlLoad[yamlKey]) is list:
-        logging.debug("yamlLoad[yamlKey]: " + str(yamlLoad[yamlKey]))
+        # logging.debug("yamlLoad[yamlKey]: " + str(yamlLoad[yamlKey]))
         for yamlItem in yamlLoad[yamlKey]:
-            logging.debug("yamlItem: " + str(yamlItem))
+            # logging.debug("yamlItem: " + str(yamlItem))
             if type(yamlItem) is dict:
                 for node in yamlItem.keys():
-                    logging.debug("node: " + str(node))
+                    # logging.debug("node: " + str(node))
                     if len(subNodeFilter) == 0 or node in subNodeFilter:
-                        yamlInsertDict = {node: yamlItem[node]}
-                        yamlInsertList.append(yamlInsertDict)
+                        if node == "name" and "type" in yamlItem.keys():
+                            pass
+                        else:
+                            yamlInsertDict = {node: yamlItem[node]}
+                            yamlInsertList.append(yamlInsertDict)
     return yamlInsertList
 
 
 yamlEntries = []
 yamlDict = {}
-mainNodeFilter = ["manufacture", "soldiers", "items"]
-mainNodeFilter = []
+mainNodeFilter = ["items"]
+# mainNodeFilter = []
 subNodeFilter = ["type", "name", "id"]
 # subNodeFilter = []
 
