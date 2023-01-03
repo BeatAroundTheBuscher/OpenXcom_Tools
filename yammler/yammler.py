@@ -1,12 +1,10 @@
 import sys
-import yaml
-import yaml.composer
-
 import logging
 import datetime
 
 sys.path.insert(0, './commons')
 import file_handling as fH  # noqa
+import yaml_handling as yH  # noqa
 
 if len(sys.argv) < 2:
     print("Usage: yammler.py path-to-mod-root-dictionary")  # noqa
@@ -39,76 +37,11 @@ for path in paths:
 
 logging.info("Number of Ruleset Files: " + str(len(fileList)))
 
-
-def yamlAdd(loader, node):
-    pass
-    return ""
-
-
-def yamlRemove(loader, node):
-    print("yamlRemover")
-    print(loader)
-    print(node)
-    return ""
-
 # https://stackoverflow.com/questions/45966633/yaml-error-could-not-determine-a-constructor-for-the-tag
 # https://www.programcreek.com/python/example/11269/yaml.add_constructor
 # https://python.hotexamples.com/examples/yaml/Loader/add_constructor/python-loader-add_constructor-method-examples.html
 
-
-yaml.SafeLoader.add_constructor('!add', yamlAdd)
-yaml.SafeLoader.add_constructor('!remove', yamlRemove)
-
-
-def tryYamlSafeLoad(fileHandler):
-    try:
-        return yaml.safe_load(fileHandler)
-    except yaml.constructor.ConstructorError as e:
-        logging.error("Constructor Error; Affected file: "
-                      + str(fileHandler.name))
-        logging.error(e)
-        return dict()
-    except yaml.composer.ComposerError as e:
-        logging.error("Composer Error; Affected file: "
-                      + str(fileHandler.name))
-        logging.error(e)
-        return dict()
-
-
-class yamlItemEntry:
-    def __init__(self, yamlEntry):
-        self.name = self.safeInsert(yamlEntry, "name")
-        self.itemName = self.safeInsert(yamlEntry, "type")
-        self.battleType = self.safeInsert(yamlEntry, "battleType")
-        self.tuAuto = self.safeInsert(yamlEntry, "tuAuto")
-        self.tuSnap = self.safeInsert(yamlEntry, "tuSnap")
-        self.tuAimed = self.safeInsert(yamlEntry, "tuAimed")
-        self.rosigmaComment = self.safeInsert(yamlEntry, "rosigmaComment")
-
-    def safeInsert(self, yamlEntry, key):
-        try:
-            return yamlEntry[key]
-        except KeyError:
-            return ""
-
-
-def extractYamlItems(yamlLoad, yamlKey, subNodeFilter):
-    yamlInsertList = []
-    if type(yamlLoad[yamlKey]) is list:
-        # logging.debug("yamlLoad[yamlKey]: " + str(yamlLoad[yamlKey]))
-        for yamlItem in yamlLoad[yamlKey]:
-            # logging.debug("yamlItem: " + str(yamlItem))
-            if type(yamlItem) is dict:
-                for node in yamlItem.keys():
-                    # logging.debug("node: " + str(node))
-                    if len(subNodeFilter) == 0 or node in subNodeFilter:
-                        if node == "name" and "type" in yamlItem.keys():
-                            pass
-                        else:
-                            yamlInsertDict = {node: yamlItem[node]}
-                            yamlInsertList.append(yamlInsertDict)
-    return yamlInsertList
-
+yH.addOXCEConstructors()
 
 yamlEntries = []
 yamlDict = {}
@@ -119,7 +52,7 @@ subNodeFilter = ["type", "name", "id"]
 
 for filePath in fileList:
     yamlFile = open(filePath, 'r')
-    yamlLoad = tryYamlSafeLoad(yamlFile)
+    yamlLoad = yH.tryYamlSafeLoad(yamlFile)
 
     # tryYamlSafeLoad returns a dict
     # that includes a list that consists of dicts
@@ -137,7 +70,8 @@ for filePath in fileList:
             if yamlKey not in yamlDict:
                 yamlDict[yamlKey] = []
 
-            yamlInsertList = extractYamlItems(yamlLoad, yamlKey, subNodeFilter)
+            yamlInsertList = yH.extractYamlItems(
+                                yamlLoad, yamlKey, subNodeFilter)
             yamlDict[yamlKey].append(yamlInsertList)
     yamlFile.close()
 
@@ -145,8 +79,9 @@ for filePath in fileList:
 logging.debug(yamlDict.keys())
 
 
-with open('names.yaml', 'w') as file:
-    yaml.dump(yamlDict, file)
+for x in yamlDict.keys():
+    with open("./output/" + str(x) + ".yaml", 'w') as file:
+        yH.dumpOXCEYamlFiles(yamlDict, file)
 
 # for x in yamlDict.keys():
 #    logging.debug(x)
