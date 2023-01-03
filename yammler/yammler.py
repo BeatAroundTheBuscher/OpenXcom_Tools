@@ -94,25 +94,43 @@ class yamlItemEntry:
 
 yamlEntries = []
 yamlDict = {}
+filter = ["manufacture", "soldiers", "items"]
+filter = []
 
 for filePath in fileList:
     yamlFile = open(filePath, 'r')
     yamlLoad = tryYamlSafeLoad(yamlFile)
+
+    # tryYamlSafeLoad returns a dict
+    # that includes a list that consists of dicts
+    # <class 'dict'> # print(type(yamlLoad))
+    # <class 'list'> # print(type(yamlLoad["manufacture"]))
+    # <class 'dict'> # print(type(yamlLoad["manufacture"][0]))
+    # final entries like name returns 'str'
+    # entries with lists like requires return another list with 'str'
+
     logging.debug(filePath)
     logging.debug(yamlLoad.keys())
 
     for yamlKey in yamlLoad.keys():
-        if yamlKey not in yamlDict:
-            yamlDict[yamlKey] = []
+        if len(filter) == 0 or yamlKey in filter:
+            if yamlKey not in yamlDict:
+                yamlDict[yamlKey] = []
 
-        yamlDict[yamlKey].append(yamlLoad[yamlKey])
+            yamlDict[yamlKey].append(yamlLoad[yamlKey])
 
     yamlFile.close()
+
+
 logging.debug(yamlDict.keys())
 
-for x in yamlDict.keys():
-    logging.debug(x)
-    logging.debug(yamlDict[x])
+
+with open('names.yaml', 'w') as file:
+    yaml.dump(yamlDict, file)
+
+# for x in yamlDict.keys():
+#    logging.debug(x)
+#    logging.debug(yamlDict[x])
 
 
 """
@@ -128,7 +146,7 @@ for x in yamlEntries:
             for yamlContent in yamlLoad[yamlKey]:
                 print(yamlContent)
                 print(type(yamlContent))
-                if "name" in yamlContent.keys():
+                if"name" in yamlContent.keys():
                     print(yamlContent["name"])
                 if "id" in yamlContent.keys():
                     print(yamlContent["id"])
