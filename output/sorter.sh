@@ -50,7 +50,13 @@ cat_file=$(echo "*$cur_file.yaml")
 echo "$cur_file:" > $delete_file
 cat $cat_file | grep -v "\[\]" | sed 's/- -/  -/g' | awk 'BEGIN { FS = " "} /-/ { $2 = "delete:"; print "  " $0 }' | sort -u >> $delete_file
 
-cur_file="items"
+cur_file="events"
+delete_file=$(echo "delete_$cur_file.rul")
+cat_file=$(echo "*$cur_file.yaml")
+echo "$cur_file:" > $delete_file
+cat $cat_file | grep -v "\[\]" | sed 's/- -/  -/g' | awk 'BEGIN { FS = " "} /-/ { $2 = "delete:"; print "  " $0 }' | sort -u >> $delete_file
+
+cur_file="eventScripts"
 delete_file=$(echo "delete_$cur_file.rul")
 cat_file=$(echo "*$cur_file.yaml")
 echo "$cur_file:" > $delete_file
@@ -62,7 +68,19 @@ cat_file=$(echo "*$cur_file.yaml")
 echo "$cur_file:" > $delete_file
 cat $cat_file | grep -v "\[\]" | sed 's/- -/  -/g' | awk 'BEGIN { FS = " "} /-/ { $2 = "delete:"; print "  " $0 }' | sort -u >> $delete_file
 
+cur_file="items"
+delete_file=$(echo "delete_$cur_file.rul")
+cat_file=$(echo "*$cur_file.yaml")
+echo "$cur_file:" > $delete_file
+cat $cat_file | grep -v "\[\]" | sed 's/- -/  -/g' | awk 'BEGIN { FS = " "} /-/ { $2 = "delete:"; print "  " $0 }' | sort -u >> $delete_file
+
 cur_file="manufacture"
+delete_file=$(echo "delete_$cur_file.rul")
+cat_file=$(echo "*$cur_file.yaml")
+echo "$cur_file:" > $delete_file
+cat $cat_file | grep -v "\[\]" | sed 's/- -/  -/g' | awk 'BEGIN { FS = " "} /-/ { $2 = "delete:"; print "  " $0 }' | sort -u >> $delete_file
+
+cur_file="mapScripts"
 delete_file=$(echo "delete_$cur_file.rul")
 cat_file=$(echo "*$cur_file.yaml")
 echo "$cur_file:" > $delete_file
@@ -81,6 +99,12 @@ echo "$cur_file:" > $delete_file
 cat $cat_file | grep -v "\[\]" | sed 's/- -/  -/g' | awk 'BEGIN { FS = " "} /-/ { $2 = "delete:"; print "  " $0 }' | sort -u >> $delete_file
 
 cur_file="soldiers"
+delete_file=$(echo "delete_$cur_file.rul")
+cat_file=$(echo "*$cur_file.yaml")
+echo "$cur_file:" > $delete_file
+cat $cat_file | grep -v "\[\]" | sed 's/- -/  -/g' | awk 'BEGIN { FS = " "} /-/ { $2 = "delete:"; print "  " $0 }' | sort -u >> $delete_file
+
+cur_file="terrains"
 delete_file=$(echo "delete_$cur_file.rul")
 cat_file=$(echo "*$cur_file.yaml")
 echo "$cur_file:" > $delete_file
