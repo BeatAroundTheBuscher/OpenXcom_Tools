@@ -19,8 +19,9 @@ paths = sys.argv[1:]
 
 # mainNodeFilter = ["items"]
 mainNodeFilter = ["alienDeployments", "alienMissions", "alienRaces",
-                  "arcScripts", "armors", "eventScripts",
-                  "alienMissions", "enviroEffects", "units", "soldiers",
+                  "arcScripts", "armors", "eventScripts", "items",
+                  "manufacture", "crafts", "craftWeapons",
+                  "missionScripts", "enviroEffects", "units", "soldiers",
                   "facilities", "research", "ufopaedia"]
 subNodeFilter = ["type", "name", "id"]
 # subNodeFilter = []

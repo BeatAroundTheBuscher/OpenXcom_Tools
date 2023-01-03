@@ -32,13 +32,43 @@ cat_file=$(echo "*$cur_file.yaml")
 echo "$cur_file:" > $delete_file
 cat $cat_file | grep -v "\[\]" | sed 's/- -/  -/g' | awk 'BEGIN { FS = " "} /-/ { $2 = "delete:"; print "  " $0 }' | sort -u >> $delete_file
 
+cur_file="crafts"
+delete_file=$(echo "delete_$cur_file.rul")
+cat_file=$(echo "*$cur_file.yaml")
+echo "$cur_file:" > $delete_file
+cat $cat_file | grep -v "\[\]" | sed 's/- -/  -/g' | awk 'BEGIN { FS = " "} /-/ { $2 = "delete:"; print "  " $0 }' | sort -u >> $delete_file
+
+cur_file="craftWeapons"
+delete_file=$(echo "delete_$cur_file.rul")
+cat_file=$(echo "*$cur_file.yaml")
+echo "$cur_file:" > $delete_file
+cat $cat_file | grep -v "\[\]" | sed 's/- -/  -/g' | awk 'BEGIN { FS = " "} /-/ { $2 = "delete:"; print "  " $0 }' | sort -u >> $delete_file
+
 cur_file="enviroEffects"
 delete_file=$(echo "delete_$cur_file.rul")
 cat_file=$(echo "*$cur_file.yaml")
 echo "$cur_file:" > $delete_file
 cat $cat_file | grep -v "\[\]" | sed 's/- -/  -/g' | awk 'BEGIN { FS = " "} /-/ { $2 = "delete:"; print "  " $0 }' | sort -u >> $delete_file
 
+cur_file="items"
+delete_file=$(echo "delete_$cur_file.rul")
+cat_file=$(echo "*$cur_file.yaml")
+echo "$cur_file:" > $delete_file
+cat $cat_file | grep -v "\[\]" | sed 's/- -/  -/g' | awk 'BEGIN { FS = " "} /-/ { $2 = "delete:"; print "  " $0 }' | sort -u >> $delete_file
+
 cur_file="facilities"
+delete_file=$(echo "delete_$cur_file.rul")
+cat_file=$(echo "*$cur_file.yaml")
+echo "$cur_file:" > $delete_file
+cat $cat_file | grep -v "\[\]" | sed 's/- -/  -/g' | awk 'BEGIN { FS = " "} /-/ { $2 = "delete:"; print "  " $0 }' | sort -u >> $delete_file
+
+cur_file="manufacture"
+delete_file=$(echo "delete_$cur_file.rul")
+cat_file=$(echo "*$cur_file.yaml")
+echo "$cur_file:" > $delete_file
+cat $cat_file | grep -v "\[\]" | sed 's/- -/  -/g' | awk 'BEGIN { FS = " "} /-/ { $2 = "delete:"; print "  " $0 }' | sort -u >> $delete_file
+
+cur_file="missionScripts"
 delete_file=$(echo "delete_$cur_file.rul")
 cat_file=$(echo "*$cur_file.yaml")
 echo "$cur_file:" > $delete_file

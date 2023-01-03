@@ -6,7 +6,7 @@ cur_dir=$(pwd)
 
 # rm ./logs/*.log
 rm ./output/*.rul # ./output/*.yaml
-python3 ./yammler/yammler.py ~/Games/openxcom/user/mods/ROSIGMA ~/Games/openxcom/user/mods/OXCE_40k
+python3 ./yammler/yammler.py ~/Games/openxcom/standard/xcom1 ~/Games/openxcom/user/mods/ROSIGMA ~/Games/openxcom/user/mods/OXCE_40k
 
 cd output
 bash sorter.sh
