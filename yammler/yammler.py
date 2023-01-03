@@ -5,7 +5,7 @@ import yaml.composer
 import logging
 import datetime
 
-sys.path.insert(0, '../commons')
+sys.path.insert(0, './commons')
 import file_handling as fH  # noqa
 
 if len(sys.argv) < 2:
@@ -13,7 +13,7 @@ if len(sys.argv) < 2:
     sys.exit(0)
 
 # TODO: have to create a logs folder
-LOG_FILENAME = "./logs/" + (datetime.datetime.now().strftime(
+LOG_FILENAME = "./logs/" + ("yammler_" + datetime.datetime.now().strftime(
                             '%Y-%m-%d_%H:%M:%S.log'), 'a')[0]
 logging.basicConfig(filename=LOG_FILENAME, level=logging.DEBUG, filemode='w')
 

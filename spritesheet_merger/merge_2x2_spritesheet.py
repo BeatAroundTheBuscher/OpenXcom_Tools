@@ -3,7 +3,7 @@
 import sys
 import drawing_routines
 
-sys.path.insert(0, '../commons')
+sys.path.insert(0, './commons')
 import png_handling as pngH  # noqa
 
 tilePieces = []

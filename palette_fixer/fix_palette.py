@@ -15,7 +15,7 @@ import logging
 import datetime
 
 
-sys.path.insert(0, '../commons')
+sys.path.insert(0, './commons')
 import png_handling as pngH  # noqa
 import oxce_handling as oxceH  # noqa
 
@@ -28,7 +28,7 @@ if len(sys.argv) < 2:
     sys.exit(0)
 
 # TODO: have to create a logs folder
-LOG_FILENAME = "./logs/" + (datetime.datetime.now().strftime(
+LOG_FILENAME = "./logs/" + ("fix_palette_" + datetime.datetime.now().strftime(
                             '%Y-%m-%d_%H:%M:%S.log'), 'a')[0]
 logging.basicConfig(filename=LOG_FILENAME, level=logging.INFO, filemode='w')
 

@@ -1,6 +1,6 @@
 import sys
 
-sys.path.insert(0, '../commons')
+sys.path.insert(0, './commons')
 import file_handling as fH  # noqa
 
 if len(sys.argv) < 2:
