@@ -2,9 +2,8 @@ import sys
 import logging
 import datetime
 
-sys.path.insert(0, './commons')
-import file_handling as fH  # noqa
-import yaml_handling as yH  # type: ignore # noqa
+import commons.file_handling as fH
+import commons.yaml_handling as yH
 
 if len(sys.argv) < 2:
     print("Usage: yammler.py path-to-mod-root-dictionary")  # noqa
