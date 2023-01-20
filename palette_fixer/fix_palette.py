@@ -14,8 +14,10 @@ import sys
 import logging
 import datetime
 
-import commons.png_handling as pngH
-import commons.oxce_handling as oxceH
+
+sys.path.insert(0, './commons')
+import png_handling as pngH  # noqa
+import oxce_handling as oxceH  # noqa
 
 # grabbed from https://github.com/EttyKitty/OpenXcom_Tools/commit/19ea1661c8f20f24af9d7ed7ecf9afa6d166f622  # noqa
 
@@ -28,7 +30,7 @@ if len(sys.argv) < 2:
 # TODO: have to create a logs folder
 LOG_FILENAME = "./logs/" + ("fix_palette_" + datetime.datetime.now().strftime(
                             '%Y-%m-%d_%H:%M:%S.log'), 'a')[0]
-logging.basicConfig(filename=LOG_FILENAME, level=logging.DEBUG, filemode='w')
+logging.basicConfig(filename=LOG_FILENAME, level=logging.INFO, filemode='w')
 
 if len(sys.argv) < 3:
     pngH.fixPalette(sys.argv[1])

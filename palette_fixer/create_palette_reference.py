@@ -3,8 +3,9 @@
 
 import sys
 
-import commons.file_handling as fH
-import commons.png_handling as pngH
+sys.path.insert(0, './commons')
+import file_handling as fH  # noqa
+import png_handling as pngH  # noqa
 
 paths = ["oxcePalettes"]
 # pickedPalette = "UFO-JASC-SAFE"

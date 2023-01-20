@@ -3,7 +3,8 @@
 import sys
 import drawing_routines
 
-import commons.png_handling as pngH
+sys.path.insert(0, './commons')
+import png_handling as pngH  # noqa
 
 tilePieces = []
 tileWidth = 32
