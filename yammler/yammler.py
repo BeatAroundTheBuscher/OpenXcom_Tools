@@ -32,7 +32,7 @@ mainNodeFilter = ["alienDeployments", "alienMissions", "alienRaces",
                   "missionScripts", "enviroEffects", "units", "soldiers",
                   "facilities", "research", "ufopaedia"]
 """
-mainNodeFilter = ["research"]                  
+mainNodeFilter = ["research"]
 # subNodeFilter = ["type", "name", "id"]
 subNodeFilter = []
 

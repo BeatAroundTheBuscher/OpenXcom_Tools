@@ -10,7 +10,7 @@
             "request": "launch",
             "program": "./yammler/yammler.py",
             "args": [
-                "~/Games/openxcom/user/mods/ROSIGMA_Arbites"
+                "~/Games/openxcom/standard/xcom1"
             ],
             "console": "integratedTerminal",
             "justMyCode": true
