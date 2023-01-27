@@ -11,13 +11,14 @@
 
 
 import sys
+import os
 import logging
 import datetime
 
 
-sys.path.insert(0, './commons')
-import png_handling as pngH  # noqa
-import oxce_handling as oxceH  # noqa
+sys.path.append(os.getcwd())
+import commons.png_handling as pngH  # noqa
+import commons.oxce_handling as oxceH  # noqa
 
 # grabbed from https://github.com/EttyKitty/OpenXcom_Tools/commit/19ea1661c8f20f24af9d7ed7ecf9afa6d166f622  # noqa
 

@@ -1,10 +1,12 @@
 import sys
+import os
 import logging
 import datetime
 
-sys.path.insert(0, './commons')
-import file_handling as fH  # noqa
-import yaml_handling as yH  # type: ignore # noqa
+sys.path.append(os.getcwd())
+import commons.file_handling as fH # noqa
+import commons.yaml_handling as yH # noqa
+
 
 if len(sys.argv) < 2:
     print("Usage: yammler.py path-to-mod-root-dictionary")  # noqa
@@ -22,15 +24,17 @@ paths = sys.argv[1:]
 # terrains which are deleted and recreated in the submod require
 # the MAP/TERRAINS/ROUTES files inside the submod
 # if you only want to change the terrains just edit them
-
+"""
 mainNodeFilter = ["alienDeployments", "alienMissions", "alienRaces",
                   "arcScripts", "armors", "eventScripts", "items",
                   "manufacture", "crafts", "craftWeapons",
                   "events", "eventScripts",
                   "missionScripts", "enviroEffects", "units", "soldiers",
                   "facilities", "research", "ufopaedia"]
-subNodeFilter = ["type", "name", "id"]
-# subNodeFilter = []
+"""
+mainNodeFilter = ["research"]                  
+# subNodeFilter = ["type", "name", "id"]
+subNodeFilter = []
 
 for path in paths:
     print(path)

@@ -1,10 +1,11 @@
 # test: python3 merge_2x2_spritesheet.py sentinel_heavy_plasma.png 20
 
 import sys
+import os
 import drawing_routines
 
-sys.path.insert(0, './commons')
-import png_handling as pngH  # noqa
+sys.path.append(os.getcwd())
+import commons.png_handling as pngH  # noqa
 
 tilePieces = []
 tileWidth = 32

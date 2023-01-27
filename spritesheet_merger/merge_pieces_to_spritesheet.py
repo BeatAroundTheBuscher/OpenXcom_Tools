@@ -1,7 +1,9 @@
 import sys
+import os
 
-sys.path.insert(0, './commons')
-import file_handling as fH  # noqa
+sys.path.append(os.getcwd())
+import commons.file_handling as fH # noqa
+
 
 if len(sys.argv) < 2:
     print("Usage: python merge_pieces_to_spritesheet.py xcom-extracted-images-folder")  # noqa
