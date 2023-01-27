@@ -1,3 +1,5 @@
+# https://stackoverflow.com/questions/52901012/what-is-a-list-in-bash
+
 #!/bin/bash
 
 # shopt -s nullglob
