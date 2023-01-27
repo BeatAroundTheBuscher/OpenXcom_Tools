@@ -5,3 +5,6 @@
 *.yaml
 *.rul
 *.txt
+*.ignore
+.gitignore
+tech_tree_editor/*
