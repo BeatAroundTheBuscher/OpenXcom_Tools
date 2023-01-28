@@ -10,7 +10,8 @@
             "request": "launch",
             "program": "./yammler/yammler.py",
             "args": [
-                "~/Games/openxcom/standard/xcom1"
+                "~/Games/openxcom/standard/xcom1",
+                "~/Games/openxcom/user/mods/ruaml_xcom1"
             ],
             "console": "integratedTerminal",
             "justMyCode": true

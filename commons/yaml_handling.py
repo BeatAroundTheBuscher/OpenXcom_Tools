@@ -1,40 +1,51 @@
 # pyyaml is not maintained anymore
 # https://stackoverflow.com/a/36760452
-# import yaml
-# import yaml.composer
+# https://www.programcreek.com/python/example/103790/ruamel.yaml.org
+
 import logging
-# from ruamel.yaml import YAML
 import ruamel.yaml
 
 
 class yamlAdd:
     yaml_tag = u'!add'
 
-    def __init__(self):
-        pass
+    def __init__(self, myList):
+        # self.myTag = myTag  # is implicit
+        self.myList = myList
 
     @classmethod
     def to_yaml(cls, representer, node):
-        return representer.represent_scalar(cls.yaml_tag, "")
+        for i in range(0, len(node.myList)):
+            node.myList[i] = node.myList[i].value
+        return representer.represent_sequence(cls.yaml_tag, node.myList)
+        # had to look into representer.py that one can directly pass a node
+        # API was read from source code because documentation is overrated
 
     @classmethod
     def from_yaml(cls, constructor, node):
-        return None  # cls(*node.value.split('-'))
+        if type(node.value) is list:
+            return cls(node.value)
+        return None
 
 
 class yamlRemove:
     yaml_tag = u'!remove'
 
-    def __init__(self):
-        pass
+    def __init__(self, myList):
+        # self.myTag = myTag  # is implicit
+        self.myList = myList
 
     @classmethod
     def to_yaml(cls, representer, node):
-        return representer.represent_scalar(cls.yaml_tag, "")
+        for i in range(0, len(node.myList)):
+            node.myList[i] = node.myList[i].value
+        return representer.represent_sequence(cls.yaml_tag, node.myList)
 
     @classmethod
     def from_yaml(cls, constructor, node):
-        return None  # cls(*node.value.split('-'))
+        if type(node.value) is list:
+            return cls(node.value)
+        return None
 
 
 yaml = ruamel.yaml.YAML(typ="rt")
@@ -86,8 +97,6 @@ class yamlItemEntry:
 
 def extractYamlItems(yamlLoad, yamlKey, subNodeFilter):
     yamlInsertList = []
-    a = type(yamlLoad[yamlKey])
-    print(a)
     if type(yamlLoad[yamlKey]) is ruamel.yaml.CommentedSeq:
         # logging.debug("yamlLoad[yamlKey]: " + str(yamlLoad[yamlKey]))
         for yamlItem in yamlLoad[yamlKey]:
