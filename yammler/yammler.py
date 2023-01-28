@@ -51,8 +51,6 @@ for path in paths:
     # https://www.programcreek.com/python/example/11269/yaml.add_constructor
     # https://python.hotexamples.com/examples/yaml/Loader/add_constructor/python-loader-add_constructor-method-examples.html
 
-    yH.addOXCEConstructors()
-
     yamlEntries = []
     yamlDict = {}
 

@@ -3,37 +3,68 @@
 # import yaml
 # import yaml.composer
 import logging
-from ruamel import yaml
+# from ruamel.yaml import YAML
+import ruamel.yaml
 
 
-def yamlAdd(loader, node):
-    pass
-    return ""
+class yamlAdd:
+    yaml_tag = u'!add'
+
+    def __init__(self):
+        pass
+
+    @classmethod
+    def to_yaml(cls, representer, node):
+        return representer.represent_scalar(cls.yaml_tag, "")
+
+    @classmethod
+    def from_yaml(cls, constructor, node):
+        return None  # cls(*node.value.split('-'))
 
 
-def yamlRemove(loader, node):
-    pass
-    """
-    print("yamlRemover")
-    print(loader)
-    print(node)
-    """
-    return ""
+class yamlRemove:
+    yaml_tag = u'!remove'
+
+    def __init__(self):
+        pass
+
+    @classmethod
+    def to_yaml(cls, representer, node):
+        return representer.represent_scalar(cls.yaml_tag, "")
+
+    @classmethod
+    def from_yaml(cls, constructor, node):
+        return None  # cls(*node.value.split('-'))
+
+
+yaml = ruamel.yaml.YAML(typ="rt")
+yaml.register_class(yamlAdd)
+yaml.register_class(yamlRemove)
+yaml.allow_duplicate_keys = True
+ruamel.yaml.add_constructor('!add', yamlAdd)
+ruamel.yaml.add_constructor('!remove', yamlAdd)
 
 
 def tryYamlSafeLoad(fileHandler):
     try:
-        return yaml.safe_load(fileHandler)
-    except yaml.constructor.ConstructorError as e:
+        return yaml.load(fileHandler)
+    except NotImplementedError as e:
+        logging.error("NotImplementedError; Affected file: "
+                      + str(fileHandler.name))
+        logging.error(e)
+        return dict()
+    """
+    except yaml.add_constructor.ConstructorError as e:
         logging.error("Constructor Error; Affected file: "
                       + str(fileHandler.name))
         logging.error(e)
         return dict()
-    except yaml.composer.ComposerError as e:
+    except yaml.add_composer.ComposerError as e:
         logging.error("Composer Error; Affected file: "
                       + str(fileHandler.name))
         logging.error(e)
         return dict()
+    """
 
 
 class yamlItemEntry:
@@ -55,7 +86,9 @@ class yamlItemEntry:
 
 def extractYamlItems(yamlLoad, yamlKey, subNodeFilter):
     yamlInsertList = []
-    if type(yamlLoad[yamlKey]) is list:
+    a = type(yamlLoad[yamlKey])
+    print(a)
+    if type(yamlLoad[yamlKey]) is ruamel.yaml.CommentedSeq:
         # logging.debug("yamlLoad[yamlKey]: " + str(yamlLoad[yamlKey]))
         for yamlItem in yamlLoad[yamlKey]:
             yamlInsertList.append(yamlItem)
@@ -75,13 +108,8 @@ def extractYamlItems(yamlLoad, yamlKey, subNodeFilter):
     return yamlInsertList
 
 
-def addOXCEConstructors():
-    yaml.SafeLoader.add_constructor('!add', yamlAdd)
-    yaml.SafeLoader.add_constructor('!remove', yamlRemove)
-
-
 def dumpOXCEYamlFiles(yamlDict, yamlKey, file):
     if len(yamlDict[yamlKey]) > 0:
         # this will order alphanumerical and not keep the original order
-        # yaml.dump(yamlDict[yamlKey], file) 
-        yaml.dump(yamlDict[yamlKey], file, Dumper=yaml.RoundTripDumper)
+        # yaml.dump(yamlDict[yamlKey], file)
+        yaml.dump(yamlDict[yamlKey], file)
