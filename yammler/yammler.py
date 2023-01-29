@@ -24,17 +24,20 @@ paths = sys.argv[1:]
 # terrains which are deleted and recreated in the submod require
 # the MAP/TERRAINS/ROUTES files inside the submod
 # if you only want to change the terrains just edit them
-"""
+
 mainNodeFilter = ["alienDeployments", "alienMissions", "alienRaces",
                   "arcScripts", "armors", "eventScripts", "items",
                   "manufacture", "crafts", "craftWeapons",
                   "events", "eventScripts",
                   "missionScripts", "enviroEffects", "units", "soldiers",
                   "facilities", "research", "ufopaedia"]
+
+subNodeFilter = ["type", "name", "id"]
+
 """
 mainNodeFilter = ["research"]
-# subNodeFilter = ["type", "name", "id"]
 subNodeFilter = []
+"""
 
 for path in paths:
     print(path)

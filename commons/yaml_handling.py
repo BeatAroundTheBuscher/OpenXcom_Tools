@@ -100,20 +100,20 @@ def extractYamlItems(yamlLoad, yamlKey, subNodeFilter):
     if type(yamlLoad[yamlKey]) is ruamel.yaml.CommentedSeq:
         # logging.debug("yamlLoad[yamlKey]: " + str(yamlLoad[yamlKey]))
         for yamlItem in yamlLoad[yamlKey]:
-            yamlInsertList.append(yamlItem)
-            """
             # logging.debug("yamlItem: " + str(yamlItem))
-            if type(yamlItem) is dict:
+            if len(subNodeFilter) == 0:
+                yamlInsertList.append(yamlItem)
+            else:
                 for node in yamlItem.keys():
                     # logging.debug("node: " + str(node))
-                    if len(subNodeFilter) == 0 or node in subNodeFilter:
+                    if node in subNodeFilter:
                         # exception for unit names after type
                         if node == "name" and "type" in yamlItem.keys():
                             pass
                         else:
-                            yamlInsertDict = {node: yamlItem}
+                            yamlInsertDict = {node: yamlItem[node]}
                             yamlInsertList.append(yamlInsertDict)
-            """
+            
     return yamlInsertList
 
 

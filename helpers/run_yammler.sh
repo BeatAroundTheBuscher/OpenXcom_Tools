@@ -11,10 +11,8 @@ rm ./output/*.rul
 echo $cur_dir
 
 # python3 ./yammler/yammler.py ~/Games/openxcom/user/mods/Piratez
-python3 ./yammler/yammler.py ~/Games/openxcom/user/mods/ROSIGMA
-# python3 ./yammler/yammler.py ~/Games/openxcom/standard/xcom1 ~/Games/openxcom/user/mods/OXCE_40k ~/Games/openxcom/user/mods/ROSIGMA
-
-exit
+# python3 ./yammler/yammler.py ~/Games/openxcom/user/mods/ROSIGMA
+python3 ./yammler/yammler.py ~/Games/openxcom/standard/xcom1 ~/Games/openxcom/user/mods/OXCE_40k ~/Games/openxcom/user/mods/ROSIGMA
 
 cd output
 bash ../helpers/sorter.sh
