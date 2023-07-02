@@ -15,7 +15,7 @@ if len(sys.argv) < 2:
 # TODO: have to create a logs folder
 LOG_FILENAME = "./logs/" + ("yammler_" + datetime.datetime.now().strftime(
                             '%Y-%m-%d_%H:%M:%S.log'), 'a')[0]
-logging.basicConfig(filename=LOG_FILENAME, level=logging.INFO, filemode='w')
+logging.basicConfig(filename=LOG_FILENAME, level=logging.DEBUG, filemode='w')
 
 paths = sys.argv[1:]
 
@@ -30,6 +30,7 @@ mainNodeFilter = ["alienDeployments", "alienMissions", "alienRaces",
                   "manufacture", "crafts", "craftWeapons",
                   "events", "eventScripts",
                   "missionScripts", "enviroEffects", "units", "soldiers",
+                  "soldierBonuses", "commendations",
                   "facilities", "research", "ufopaedia"]
 
 subNodeFilter = ["type", "name", "id"]

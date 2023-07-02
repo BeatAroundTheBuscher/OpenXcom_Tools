@@ -82,11 +82,11 @@ cat_file=$(echo "*$cur_file.yaml")
 echo "$cur_file:" > $delete_file
 cat $cat_file | grep -v "\[\]" | sed 's/- -/  -/g' | awk 'BEGIN { FS = " "} /-/ { $2 = "delete:"; print "  " $0 }' | sort -u >> $delete_file
 
-cur_file="mapScripts"
-delete_file=$(echo "delete_$cur_file.rul")
-cat_file=$(echo "*$cur_file.yaml")
-echo "$cur_file:" > $delete_file
-cat $cat_file | grep -v "\[\]" | sed 's/- -/  -/g' | awk 'BEGIN { FS = " "} /-/ { $2 = "delete:"; print "  " $0 }' | sort -u >> $delete_file
+#cur_file="mapScripts"
+#delete_file=$(echo "delete_$cur_file.rul")
+#cat_file=$(echo "*$cur_file.yaml")
+#echo "$cur_file:" > $delete_file
+#cat $cat_file | grep -v "\[\]" | sed 's/- -/  -/g' | awk 'BEGIN { FS = " "} /-/ { $2 = "delete:"; print "  " $0 }' | sort -u >> $delete_file
 
 cur_file="missionScripts"
 delete_file=$(echo "delete_$cur_file.rul")
@@ -106,11 +106,23 @@ cat_file=$(echo "*$cur_file.yaml")
 echo "$cur_file:" > $delete_file
 cat $cat_file | grep -v "\[\]" | sed 's/- -/  -/g' | awk 'BEGIN { FS = " "} /-/ { $2 = "delete:"; print "  " $0 }' | sort -u >> $delete_file
 
-cur_file="terrains"
+cur_file="soldierBonuses"
 delete_file=$(echo "delete_$cur_file.rul")
 cat_file=$(echo "*$cur_file.yaml")
 echo "$cur_file:" > $delete_file
 cat $cat_file | grep -v "\[\]" | sed 's/- -/  -/g' | awk 'BEGIN { FS = " "} /-/ { $2 = "delete:"; print "  " $0 }' | sort -u >> $delete_file
+
+cur_file="commendations"
+delete_file=$(echo "delete_$cur_file.rul")
+cat_file=$(echo "*$cur_file.yaml")
+echo "$cur_file:" > $delete_file
+cat $cat_file | grep -v "\[\]" | sed 's/- -/  -/g' | awk 'BEGIN { FS = " "} /-/ { $2 = "delete:"; print "  " $0 }' | sort -u >> $delete_file
+
+#cur_file="terrains"
+#delete_file=$(echo "delete_$cur_file.rul")
+#cat_file=$(echo "*$cur_file.yaml")
+#echo "$cur_file:" > $delete_file
+#cat $cat_file | grep -v "\[\]" | sed 's/- -/  -/g' | awk 'BEGIN { FS = " "} /-/ { $2 = "delete:"; print "  " $0 }' | sort -u >> $delete_file
 
 cur_file="ufopaedia"
 delete_file=$(echo "delete_$cur_file.rul")
