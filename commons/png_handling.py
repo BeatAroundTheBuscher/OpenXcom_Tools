@@ -5,7 +5,7 @@ from PIL import Image
 import logging
 import png
 import re
-import oxcePalettes
+import commons.oxcePalettes as oxcePal
 
 
 def getPaletteJASC(path):
@@ -39,14 +39,14 @@ def guessPalette(metadata):
         raise ValueError("Image does not have a palette with 256 colors")
         return None
 
-    testVector = [oxcePalettes.paletteBattleScapeUFO,
-                  oxcePalettes.paletteUfopaediaUFO,
-                  oxcePalettes.paletteBaseScapeUFO,
-                  oxcePalettes.paletteGeoScapeUFO,
-                  oxcePalettes.paletteBattlePediaUFO,
-                  oxcePalettes.paletteGraphsUFO,
-                  oxcePalettes.paletteBattleCommonUFO,
-                  oxcePalettes.paletteBackgroundUFO]
+    testVector = [oxcePal.paletteBattleScapeUFO,
+                  oxcePal.paletteUfopaediaUFO,
+                  oxcePal.paletteBaseScapeUFO,
+                  oxcePal.paletteGeoScapeUFO,
+                  oxcePal.paletteBattlePediaUFO,
+                  oxcePal.paletteGraphsUFO,
+                  oxcePal.paletteBattleCommonUFO,
+                  oxcePal.paletteBackgroundUFO]
 
     for test in testVector:
         confidence = 0
