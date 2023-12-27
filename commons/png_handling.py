@@ -138,40 +138,43 @@ def xcom_crop(inputPNG, width, height, tilePieces):
     return tilePieces
 
 
-"""
-# test putting split parts back to sprite sheet
-def recreateSpritesheet(tilePiecesList):
-    img = Image.open("template.png") # contains palette
-    for listIndex in range(0, len(tilePiecesList)):
-        tileX = int(listIndex % tilesPerRow)
-        tileY = int(listIndex / tilesPerRow)
-        selectedTile = tilePiecesList[listIndex]
-        for pixelIndex in range(0, tileWidth*tileHeight):
-            relativePixelX = int (pixelIndex % tileWidth)
-            relativePixelY = int (pixelIndex / tileWidth)
-            pixel = int(selectedTile.getpixel((\
-                relativePixelX, relativePixelY)))
-            if pixel != 0:
-                img.putpixel((\
-                    tileX * tileWidth + relativePixelX,\
-                    tileY * tileHeight + relativePixelY),\
-                    pixel)
-
-    return img
-
-img = recreateSpritesheet(tilePieces)
-"""
-
-
-def mergeSpritesheet(readFilePath, tileWidth, tileHeight, tilePiecesList,
-                     mergedWidth, mergedHeight, mergedList, piecesPerRow,
-                     x, y):
+def prepareOutputFile(readFilePath, x , y):
     img = Image.open(readFilePath)  # contains palette
     palette = img.getpalette()
     # https://stackoverflow.com/questions/52307290/what-is-the-difference-between-images-in-p-and-l-mode-in-pil
     img = Image.new('P', (x, y), 0)  # 'P' for paletted
     # TODO: Figure out how to set palette properly
     img.putpalette(palette, 'RGB')  # type: ignore
+
+    return img
+
+
+# test putting split parts back to sprite sheet
+def recreateSpritesheet(readFilePath, tileWidth, tileHeight,
+                        tilePiecesList, tilesPerRow):
+    # TODO: Get rid of template
+    img = prepareOutputFile(readFilePath, 1000, 1000)
+    for listIndex in range(0, len(tilePiecesList)):
+        tileX = int(listIndex % tilesPerRow)
+        tileY = int(listIndex / tilesPerRow)
+        selectedTile = tilePiecesList[listIndex]
+        for pixelIndex in range(0, tileWidth*tileHeight):
+            relativePixelX = int(pixelIndex % tileWidth)
+            relativePixelY = int(pixelIndex / tileWidth)
+            pixel = int(selectedTile.getpixel((
+                relativePixelX, relativePixelY)))
+            if pixel != 0:
+                img.putpixel((tileX * tileWidth + relativePixelX,
+                              tileY * tileHeight + relativePixelY),
+                             pixel)
+
+    return img
+
+
+def mergeSpritesheet(readFilePath, tileWidth, tileHeight, tilePiecesList,
+                     mergedWidth, mergedHeight, mergedList, piecesPerRow,
+                     x, y):
+    img = prepareOutputFile(readFilePath, x, y)
     for i in range(0, len(mergedList)):
         # selectedTiles
         tile0 = tilePiecesList[mergedList[i][0]]
