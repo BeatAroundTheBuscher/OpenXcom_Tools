@@ -36,6 +36,9 @@ sys.exit(0)
 def findBottomLeft(img):
     imgWidth, imgHeight = img.size
 
+    startPoint = (0, 0)
+    endPoint = (0, 0)
+
     # 2 steps right, 1 step down
     for startY in range(imgHeight - 1, 0, -1):
         drawBool = True
@@ -51,7 +54,7 @@ def findBottomLeft(img):
             if img.getpixel((currentX, currentY)) != 0 or\
                img.getpixel((currentX + 1, currentY)) != 0:
                 drawBool = False
-                break
+                return startPoint, endPoint
 
         if drawBool:
             # drawing the lines between two points
@@ -62,11 +65,15 @@ def findBottomLeft(img):
                 pixelsToBottom = imgWidth / 2
             startPoint = (0, startY)
             endPoint = (1 + pixelsToRight, startY + pixelsToBottom)
-            drawMulticolorLine(img, startPoint, endPoint)
+            # drawMulticolorLine(img, startPoint, endPoint)
+    return startPoint, endPoint
 
 
 def findBottomRight(inputPNG):
     imgWidth, imgHeight = img.size
+
+    startPoint = (0, 0)
+    endPoint = (0, 0)
 
     # 2 steps left, 1 step down
     for startY in range(imgHeight - 1, 0, -1):
@@ -81,7 +88,7 @@ def findBottomRight(inputPNG):
             if img.getpixel((currentX, currentY)) != 0 or\
                img.getpixel((currentX - 1, currentY)) != 0:
                 drawBool = False
-                break
+                return startPoint, endPoint
 
         if drawBool:
             # drawing the lines between two points
@@ -92,7 +99,8 @@ def findBottomRight(inputPNG):
                 pixelsToBottom = imgWidth / 2
             startPoint = (imgWidth, startY)
             endPoint = (imgWidth - pixelsToLeft, startY + pixelsToBottom)
-            drawMulticolorLine(img, startPoint, endPoint)
+            # drawMulticolorLine(img, startPoint, endPoint)
+    return startPoint, endPoint
 
 
 def drawMulticolorLine(img, startPoint, endPoint):
@@ -109,7 +117,20 @@ def drawMulticolorLine(img, startPoint, endPoint):
 
 f = open(filePath, 'rb')
 img = Image.open(f)
-findBottomLeft(img)
-findBottomRight(img)
+bLeftCoord1, bLeftCoord2 = findBottomLeft(img)
+drawMulticolorLine(img, bLeftCoord1, bLeftCoord2)
+bRightCoord1, bRightCoord2 = findBottomRight(img)
+drawMulticolorLine(img, bRightCoord1, bRightCoord2)
+
+for x in range(0, 5):
+    bLeftCoord1 = (bLeftCoord1[0], bLeftCoord1[1] - 16)
+    bLeftCoord2 = (bLeftCoord2[0] + 32, bLeftCoord2[1])
+    drawMulticolorLine(img, bLeftCoord1, bLeftCoord2)
+
+for x in range(0, 5):
+    bRightCoord1 = (bRightCoord1[0], bRightCoord1[1] - 16)
+    bRightCoord2 = (bRightCoord2[0] - 32, bRightCoord2[1])
+    drawMulticolorLine(img, bRightCoord1, bRightCoord2)
+
 img.save("line_image.png")
 # img.show()
