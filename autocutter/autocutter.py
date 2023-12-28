@@ -115,22 +115,34 @@ def drawMulticolorLine(img, startPoint, endPoint):
     draw.line([startPoint, endPoint], fill=lineColor, width=1)
 
 
+def showGrid(img, bLeftCoord1, bLeftCoord2, bRightCoord1, bRightCoord2):
+    imgWidth, imgHeight = img.size
+    for x in range(0, int(imgWidth/16)+1):
+        drawMulticolorLine(img, bLeftCoord1, bLeftCoord2)
+        bLeftCoord1 = (bLeftCoord1[0], bLeftCoord1[1] - 16)
+        bLeftCoord2 = (bLeftCoord2[0] + 32, bLeftCoord2[1])
+        print("bLeftCoord1: " + str(bLeftCoord1))
+        print("bLeftCoord2: " + str(bLeftCoord2))
+
+    for x in range(0, int(imgHeight/8)+1):
+        drawMulticolorLine(img, bRightCoord1, bRightCoord2)
+        bRightCoord1 = (bRightCoord1[0], bRightCoord1[1] - 16)
+        bRightCoord2 = (bRightCoord2[0] - 32, bRightCoord2[1])
+        print("bRightCoord1: " + str(bRightCoord1))
+        print("bRightCoord2: " + str(bRightCoord2))
+
+
 f = open(filePath, 'rb')
 img = Image.open(f)
 bLeftCoord1, bLeftCoord2 = findBottomLeft(img)
-drawMulticolorLine(img, bLeftCoord1, bLeftCoord2)
 bRightCoord1, bRightCoord2 = findBottomRight(img)
-drawMulticolorLine(img, bRightCoord1, bRightCoord2)
-
-for x in range(0, 5):
-    bLeftCoord1 = (bLeftCoord1[0], bLeftCoord1[1] - 16)
-    bLeftCoord2 = (bLeftCoord2[0] + 32, bLeftCoord2[1])
-    drawMulticolorLine(img, bLeftCoord1, bLeftCoord2)
-
-for x in range(0, 5):
-    bRightCoord1 = (bRightCoord1[0], bRightCoord1[1] - 16)
-    bRightCoord2 = (bRightCoord2[0] - 32, bRightCoord2[1])
-    drawMulticolorLine(img, bRightCoord1, bRightCoord2)
+bLeftCoord1 = (0, 72)
+bLeftCoord2 = (0, 72)
+bRightCoord1 = (104, 72)
+bRightCoord2 = (104, 72)
+showGrid(img, bLeftCoord1, bLeftCoord2, bRightCoord1, bRightCoord2)
+f.close()
 
 img.save("line_image.png")
 # img.show()
+
