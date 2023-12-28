@@ -138,11 +138,11 @@ def xcom_crop(inputPNG, width, height, tilePieces):
     return tilePieces
 
 
-def prepareOutputFile(readFilePath, x , y):
+def prepareOutputFile(readFilePath, sheetSizeX, sheetSizeY):
     img = Image.open(readFilePath)  # contains palette
     palette = img.getpalette()
     # https://stackoverflow.com/questions/52307290/what-is-the-difference-between-images-in-p-and-l-mode-in-pil
-    img = Image.new('P', (x, y), 0)  # 'P' for paletted
+    img = Image.new('P', (sheetSizeX, sheetSizeY), 0)  # 'P' for paletted
     # TODO: Figure out how to set palette properly
     img.putpalette(palette, 'RGB')  # type: ignore
 
@@ -152,7 +152,6 @@ def prepareOutputFile(readFilePath, x , y):
 # test putting split parts back to sprite sheet
 def recreateSpritesheet(readFilePath, tileWidth, tileHeight,
                         tilePiecesList, tilesPerRow):
-    # TODO: Get rid of template
     img = prepareOutputFile(readFilePath, 1000, 1000)
     for listIndex in range(0, len(tilePiecesList)):
         tileX = int(listIndex % tilesPerRow)
@@ -173,8 +172,8 @@ def recreateSpritesheet(readFilePath, tileWidth, tileHeight,
 
 def mergeSpritesheet(readFilePath, tileWidth, tileHeight, tilePiecesList,
                      mergedWidth, mergedHeight, mergedList, piecesPerRow,
-                     x, y):
-    img = prepareOutputFile(readFilePath, x, y)
+                     sheetSizeX, sheetSizeY):
+    img = prepareOutputFile(readFilePath, sheetSizeX, sheetSizeY)
     for i in range(0, len(mergedList)):
         # selectedTiles
         tile0 = tilePiecesList[mergedList[i][0]]

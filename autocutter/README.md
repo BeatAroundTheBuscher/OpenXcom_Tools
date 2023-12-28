@@ -1,3 +1,5 @@
+## Overview
+
 Assuming a PNG with the correct perspective needs to be cut into a spritesheet
 Each tile is 32x40
 4 tiles are inside a box of 64x56
@@ -38,3 +40,15 @@ a right tile can have a gap in the bottom left
 vectors for empty are
 from 15x16 to 15x39 and
 from 15x16 to 0x8 (2 pixels left then 1 up)
+
+## What to solve
+
+### Figure out the proportions of the craft
+
+- Draw two lines formed in a triangle to find the bottom part of the image
+    - Draw a line from left top to right bottom with 2x/1y
+    - Draw a line from top right to left bottom with 2x/1y
+    - Do that in an iterate fashion (per single pixel, per 16 pixels?)
+    - When there is no intersection/all pixels are empty, then deduce that you found the bottom left/right
+
+- How to draw lines with Pillow? https://pypi.org/project/Pillow/
