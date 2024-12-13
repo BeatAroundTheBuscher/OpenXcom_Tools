@@ -15,6 +15,8 @@ echo $cur_dir
 #python3 ./yammler/yammler.py ~/Games/openxcom/standard/xcom1 ~/Games/openxcom/user/mods/OXCE_40k ~/Games/openxcom/user/mods/ROSIGMA
 # python3 ./yammler/yammler.py ~/Games/openxcom/standard/xcom1 ~/Games/openxcom/user/mods/Piratez
 python3 ./yammler/yammler.py ~/Games/openxcom/standard/xcom1 ~/Games/openxcom/user/mods/OXCE_40k
+# python3 ./yammler/yammler.py ~/dev/git/OpenXcom/build/bin/standard/xcom1 ~/dev/git/OpenXcom/build/bin/user/mods/OXCE_40k
+
 
 cd output
 bash ../helpers/sorter.sh

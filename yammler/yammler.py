@@ -71,16 +71,19 @@ for path in paths:
         # entries with lists like requires return another list with 'str'
 
         logging.debug(filePath)
-        logging.debug(yamlLoad.keys())
+        try:
+            logging.debug(yamlLoad.keys())
 
-        for yamlKey in yamlLoad.keys():
-            if len(mainNodeFilter) == 0 or yamlKey in mainNodeFilter:
-                if yamlKey not in yamlDict:
-                    yamlDict[yamlKey] = []
+            for yamlKey in yamlLoad.keys():
+                if len(mainNodeFilter) == 0 or yamlKey in mainNodeFilter:
+                    if yamlKey not in yamlDict:
+                        yamlDict[yamlKey] = []
 
-                yamlInsertList = yH.extractYamlItems(
-                                    yamlLoad, yamlKey, subNodeFilter)
-                yamlDict[yamlKey].append(yamlInsertList)
+                    yamlInsertList = yH.extractYamlItems(
+                                        yamlLoad, yamlKey, subNodeFilter)
+                    yamlDict[yamlKey].append(yamlInsertList)
+        except AttributeError as e:
+            logging.debug(e)
         yamlFile.close()
 
     logging.debug(yamlDict.keys())
