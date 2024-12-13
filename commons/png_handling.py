@@ -135,7 +135,8 @@ def xcom_crop(inputPNG, width, height, tilePieces):
             box = (x, y, x+width, y+height)
             pic = img.crop(box)
             tilePieces.append(pic)
-    return tilePieces
+    # actually not needed as tilePieces is fed by reference anyway
+    return tilePieces 
 
 
 """
