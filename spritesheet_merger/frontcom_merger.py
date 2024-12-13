@@ -31,21 +31,25 @@ img = Image.new('P', (256, 40), 0)  # 'P' for paletted
 img.putpalette(palette, 'RGB')  # type: ignore
 
 
-if drawingRoutine == 1:
+if drawing_routines == 0 or drawingRoutine == 1:
     for i in range(0, 8): # NE_, E, SE, S, SW, W, NW_, N_
         if i == 0 or i == 6 or i == 7: # draw handob first
             img = pngH.drawPart(img, tilePiecesHandob[i], 32, 40, 32*i, standHeight)
-            for j in range(2, 5):
-                img = pngH.drawPart(img, tilePiecesUnit[i+8*j], 32, 40, 32*i, 0)
             img = pngH.drawPart(img, tilePiecesUnit[i+8*30], 32, 40, 32*i, 0) # left arm
             img = pngH.drawPart(img, tilePiecesUnit[i+8*31], 32, 40, 32*i, 0) # right arm
+            for j in [2, 4]:
+                img = pngH.drawPart(img, tilePiecesUnit[i+8*j], 32, 40, 32*i, 0)
+            
+
         else: # draw handob last
-            for j in range(2, 5):
+            for j in [2, 4]:
                 img = pngH.drawPart(img, tilePiecesUnit[i+8*j], 32, 40, 32*i, 0)
             img = pngH.drawPart(img, tilePiecesUnit[i+8*30], 32, 40, 32*i, 0) # left arm
             img = pngH.drawPart(img, tilePiecesUnit[i+8*31], 32, 40, 32*i, 0) # right arm
             img = pngH.drawPart(img, tilePiecesHandob[i], 32, 40, 32*i, standHeight)
 
+
+    img.save("merged_" + filePathUnit + "_" + filePathHandob )
 
     tilePiecesUnit = []
     f = open("merged_" + filePathUnit + "_" + filePathHandob, 'rb')
