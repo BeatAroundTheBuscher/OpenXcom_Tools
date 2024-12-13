@@ -49,6 +49,11 @@ for i in range(0, 8): # NE_, E, SE, S, SW, W, NW_, N_
 
 img.save("merged_" + filePathUnit + "_" + filePathHandob )
 
-
+# https://stackoverflow.com/questions/273946/how-do-i-resize-an-image-using-pil-and-maintain-its-aspect-ratio/451580#451580
+base_width = 64
+wpercent = (base_width / float(img.size[0]))
+hsize = int((float(img.size[1]) * float(wpercent)))
+img = img.resize((base_width, hsize), resample=Image.LANCZOS)
+img.save("resized" + filePathUnit + "_" + filePathHandob )
 
 sys.exit(0)
