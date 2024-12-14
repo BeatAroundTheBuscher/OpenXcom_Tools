@@ -37,12 +37,12 @@ if drawing_routines == 0 or drawingRoutine == 1:
             img = pngH.drawPart(img, tilePiecesHandob[i], 32, 40, 32*i, standHeight)
             img = pngH.drawPart(img, tilePiecesUnit[i+8*30], 32, 40, 32*i, 0) # left arm
             img = pngH.drawPart(img, tilePiecesUnit[i+8*31], 32, 40, 32*i, 0) # right arm
-            for j in [2, 4]:
+            for j in [2, 4]: # torso+legs; 3 is kneeling
                 img = pngH.drawPart(img, tilePiecesUnit[i+8*j], 32, 40, 32*i, 0)
             
 
         else: # draw handob last
-            for j in [2, 4]:
+            for j in [2, 4]: # torso+legs; 3 is kneeling
                 img = pngH.drawPart(img, tilePiecesUnit[i+8*j], 32, 40, 32*i, 0)
             img = pngH.drawPart(img, tilePiecesUnit[i+8*30], 32, 40, 32*i, 0) # left arm
             img = pngH.drawPart(img, tilePiecesUnit[i+8*31], 32, 40, 32*i, 0) # right arm

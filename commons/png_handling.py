@@ -172,6 +172,9 @@ def mergeSpritesheet(readFilePath, tileWidth, tileHeight, tilePiecesList,
     # https://stackoverflow.com/questions/52307290/what-is-the-difference-between-images-in-p-and-l-mode-in-pil
     img = Image.new('P', (x, y), 0)  # 'P' for paletted
     # TODO: Figure out how to set palette properly
+    if palette is None:
+        raise TypeError("ERROR: Make sure that you have a PNG that has an INDEXED palette.")
+    
     img.putpalette(palette, 'RGB')  # type: ignore
     for i in range(0, len(mergedList)):
         # selectedTiles
